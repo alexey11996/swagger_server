@@ -21,7 +21,11 @@ router.get("/checkcert", (req, res, next) => {
   var publicKey = req.query.publicKey;
   Default.checkcertGET(publicKey)
     .then(function(response) {
-      utils.writeJson(res, response);
+      if (response.checkresult == true) {
+        utils.writeJson(res, response);
+      } else {
+        utils.writeJson(res, response, 202);
+      }
     })
     .catch(function(response) {
       utils.writeJson(res, response);
@@ -39,12 +43,8 @@ router.post("/checkmysignature", (req, res) => {
     });
 });
 
-module.exports.checksignaturePOST = function checksignaturePOST(
-  req,
-  res,
-  next
-) {
-  var checksign = req.swagger.params["checksign"].value;
+router.post("/checksignature", (req, res, next) => {
+  var checksign = req.body;
   Default.checksignaturePOST(checksign)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -52,14 +52,10 @@ module.exports.checksignaturePOST = function checksignaturePOST(
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.checksignaturesPOST = function checksignaturesPOST(
-  req,
-  res,
-  next
-) {
-  var document = req.swagger.params["document"].value;
+router.post("/checksignatures", (req, res, next) => {
+  var document = req.body;
   Default.checksignaturesPOST(document)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -67,21 +63,21 @@ module.exports.checksignaturesPOST = function checksignaturesPOST(
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.getdateGET = function getdateGET(req, res, next) {
-  var getdate = req.swagger.params["getdate"].value;
-  Default.getdateGET(getdate)
+router.post("/getdate", (req, res, next) => {
+  var getdate = req.body;
+  Default.getdatePOST(getdate)
     .then(function(response) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.getmypublicGET = function getmypublicGET(req, res, next) {
-  var email = req.swagger.params["email"].value;
+router.get("/getmypublic", (req, res, next) => {
+  var email = req.query.publicKey;
   Default.getmypublicGET(email)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -89,10 +85,10 @@ module.exports.getmypublicGET = function getmypublicGET(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.givecertGET = function givecertGET(req, res, next) {
-  var publicKey = req.swagger.params["publicKey"].value;
+router.get("/givecert", (req, res, next) => {
+  var publicKey = req.query.publicKey;
   Default.givecertGET(publicKey)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -100,10 +96,10 @@ module.exports.givecertGET = function givecertGET(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.isdoctruePOST = function isdoctruePOST(req, res, next) {
-  var isdoctrue = req.swagger.params["isdoctrue"].value;
+router.post("/isdoctrue", (req, res, next) => {
+  var isdoctrue = req.body;
   Default.isdoctruePOST(isdoctrue)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -111,9 +107,9 @@ module.exports.isdoctruePOST = function isdoctruePOST(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.registerPOST = function registerPOST(req, res, next) {
+router.post("/register", (req, res, next) => {
   var user = req.swagger.params["user"].value;
   Default.registerPOST(user)
     .then(function(response) {
@@ -122,10 +118,10 @@ module.exports.registerPOST = function registerPOST(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.signdocPOST = function signdocPOST(req, res, next) {
-  var signdoc = req.swagger.params["signdoc"].value;
+router.post("/signdoc", (req, res, next) => {
+  var signdoc = req.body;
   Default.signdocPOST(signdoc)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -133,10 +129,10 @@ module.exports.signdocPOST = function signdocPOST(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
-module.exports.vefifyaccountGET = function vefifyaccountGET(req, res, next) {
-  var publicKey = req.swagger.params["publicKey"].value;
+router.get("/vefifyaccount", (req, res, next) => {
+  var publicKey = req.query.publicKey;
   Default.vefifyaccountGET(publicKey)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -144,6 +140,6 @@ module.exports.vefifyaccountGET = function vefifyaccountGET(req, res, next) {
     .catch(function(response) {
       utils.writeJson(res, response);
     });
-};
+});
 
 module.exports = router;

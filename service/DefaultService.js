@@ -95,7 +95,7 @@ exports.checksignaturesPOST = function(document) {
  * getdate GetDate Send document and email (optional)
  * returns GetDateResponse
  **/
-exports.getdateGET = function(getdate) {
+exports.getdatePOST = function(getdate) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples["application/json"] = {
