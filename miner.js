@@ -1,5 +1,5 @@
-const Transaction = require("./Signdoc/transaction");
-const Wallet = require("./Signdoc");
+const Transaction = require("./Register/transaction");
+const Wallet = require("./Register");
 
 class Miner {
   constructor(blockchain, transactionPool, p2pServer) {

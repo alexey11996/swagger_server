@@ -1,14 +1,33 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
 
 var utils = require("../utils/writer");
-var Default = require("../service/DefaultService");
+var Default = require("../index");
+
+const storage = multer.diskStorage({
+  destination: "./documents",
+  filename: function(req, file, cb) {
+    cb(
+      null,
+      file.originalname.split(".")[0] +
+        "-" +
+        Date.now() +
+        path.extname(file.originalname)
+    );
+  }
+});
+
+const upload = multer({
+  storage: storage
+});
 
 //router.get(`/test`, (req, res) => res.json({ msg: "default Works" }));
 
-router.get("/changekeys", (req, res, next) => {
-  var publicKey = req.query.publicKey;
-  Default.changekeysGET(publicKey)
+router.post("/signdoc", upload.single("document"), (req, res, next) => {
+  var signdoc = req.body;
+  Default.signdocPOST(signdoc, "./documents/" + req.file.filename)
     .then(function(response) {
       utils.writeJson(res, response);
     })
@@ -17,9 +36,31 @@ router.get("/changekeys", (req, res, next) => {
     });
 });
 
-router.get("/checkcert", (req, res, next) => {
-  var publicKey = req.query.publicKey;
-  Default.checkcertGET(publicKey)
+router.post("/register", (req, res, next) => {
+  var user = req.body;
+  Default.registerPOST(user)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
+router.post("/changekeys", (req, res, next) => {
+  var publicKey = req.body.publicKey;
+  Default.changekeysPOST(publicKey)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
+router.post("/checkcert", (req, res, next) => {
+  var publicKey = req.body.publicKey;
+  Default.checkcertPOST(publicKey)
     .then(function(response) {
       if (response.checkresult == true) {
         utils.writeJson(res, response);
@@ -76,9 +117,9 @@ router.post("/getdate", (req, res, next) => {
     });
 });
 
-router.get("/getmypublic", (req, res, next) => {
-  var email = req.query.publicKey;
-  Default.getmypublicGET(email)
+router.post("/getmypublic", (req, res, next) => {
+  var email = req.body.publicKey;
+  Default.getmypublicPOST(email)
     .then(function(response) {
       utils.writeJson(res, response);
     })
@@ -87,9 +128,9 @@ router.get("/getmypublic", (req, res, next) => {
     });
 });
 
-router.get("/givecert", (req, res, next) => {
-  var publicKey = req.query.publicKey;
-  Default.givecertGET(publicKey)
+router.post("/givecert", (req, res, next) => {
+  var publicKey = req.body.publicKey;
+  Default.givecertPOST(publicKey)
     .then(function(response) {
       utils.writeJson(res, response);
     })
@@ -109,31 +150,9 @@ router.post("/isdoctrue", (req, res, next) => {
     });
 });
 
-router.post("/register", (req, res, next) => {
-  var user = req.swagger.params["user"].value;
-  Default.registerPOST(user)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
-router.post("/signdoc", (req, res, next) => {
-  var signdoc = req.body;
-  Default.signdocPOST(signdoc)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
-router.get("/vefifyaccount", (req, res, next) => {
-  var publicKey = req.query.publicKey;
-  Default.vefifyaccountGET(publicKey)
+router.post("/vefifyaccount", (req, res, next) => {
+  var publicKey = req.body.publicKey;
+  Default.vefifyaccountPOST(publicKey)
     .then(function(response) {
       utils.writeJson(res, response);
     })

@@ -1,7 +1,7 @@
 const ChainUtil = require("../chain-util");
 const Transaction = require("./transaction");
 
-class Signdoc {
+class Register {
   constructor(publicKey, privateKey) {
     this.publicKey = publicKey;
     this.privateKey = privateKey;
@@ -11,27 +11,16 @@ class Signdoc {
     return ChainUtil.signData(dataHash, this.privateKey);
   }
 
-  createTransaction(
-    doc_hash,
-    doc_signature,
-    signers,
-    blockchain,
-    transactionPool
-  ) {
+  createTransaction(mobilePhone, email, fio, blockchain, transactionPool) {
     let transaction = transactionPool.existingTransaction(this.publicKey);
     if (transaction) {
-      transaction.update(this, doc_hash, doc_signature, signers);
+      transaction.update(this, mobilePhone, email, fio);
     } else {
-      transaction = Transaction.newTransaction(
-        this,
-        doc_hash,
-        doc_signature,
-        signers
-      );
+      transaction = Transaction.newTransaction(this, mobilePhone, email, fio);
       transactionPool.updateOrAddTransaction(transaction);
     }
     return transaction;
   }
 }
 
-module.exports = Signdoc;
+module.exports = Register;

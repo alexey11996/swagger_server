@@ -7,11 +7,11 @@ class Transaction {
     this.outputs = [];
   }
 
-  update(senderWallet, doc_hash, doc_signature, signers) {
+  update(senderWallet, mobilePhone, email, fio) {
     this.outputs.push({
-      doc_hash,
-      doc_signature,
-      signers
+      mobilePhone,
+      email,
+      fio
     });
     Transaction.signTransaction(this, senderWallet);
     return this;
@@ -24,13 +24,13 @@ class Transaction {
     return transaction;
   }
 
-  static newTransaction(senderWallet, doc_hash, doc_signature, signers) {
+  static newTransaction(senderWallet, mobilePhone, email, fio) {
     return Transaction.transactionWithOutputs(senderWallet, [
       {
-        user: senderWallet.publicKey,
-        doc_hash: doc_hash,
-        doc_signature: doc_signature,
-        signers: signers
+        mobilePhone: mobilePhone,
+        email: email,
+        fio: fio,
+        user: senderWallet.publicKey
       }
     ]);
     return transaction;
@@ -39,7 +39,7 @@ class Transaction {
   static signTransaction(transaction, senderWallet) {
     transaction.input = {
       timestamp: Date.now(),
-      transaction_type: "sign_transaction",
+      transaction_type: "register_transaction",
       transaction_sender: senderWallet.publicKey,
       signature: senderWallet.sign(ChainUtil.hash(transaction.outputs))
     };
