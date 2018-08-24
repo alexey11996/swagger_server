@@ -27,12 +27,12 @@ const upload = multer({
 
 router.post("/signdoc", upload.single("document"), (req, res, next) => {
   var signdoc = req.body;
-  Default.signdocPOST(signdoc, "./documents/" + req.file.filename)
+  Default.signdocPOST(signdoc, req.file.filename)
     .then(function(response) {
       utils.writeJson(res, response);
     })
     .catch(function(response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, response, 202);
     });
 });
 

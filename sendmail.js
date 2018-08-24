@@ -1,6 +1,12 @@
 const nodemailer = require("nodemailer");
 
-function sendMail(fio, doc_name, receivers) {
+exports.notifySigners = function(
+  fio,
+  doc_name,
+  recipients,
+  filename,
+  filepath
+) {
   const output = `
       <p>Пользователь ${fio} подписал документ ${doc_name} и теперь приглашает вас к подписанию.</p>
       <p>Вы можете ознакомиться с данным документом и подписать его либо проигнорировать данное сообщение.</p>
@@ -25,15 +31,15 @@ function sendMail(fio, doc_name, receivers) {
   // setup email data with unicode symbols
   let mailOptions = {
     from: '"Document\'s blockchain" <alexgridnev96@mail.ru>', // sender address
-    to: "marchgridnev96@gmail.com", // list of receivers
+    to: recipients, // list of receivers
     subject: "Новое приглашение к подписи", // Subject line
     //text: "Hello world!", // plain text body
     html: output, // html body
     attachments: [
       {
         // file on disk as an attachment
-        filename: "text.txt",
-        path: "public/text.txt" // stream this file
+        filename: filename,
+        path: filepath // stream this file
       }
     ]
   };
@@ -46,4 +52,4 @@ function sendMail(fio, doc_name, receivers) {
     console.log("Message sent: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   });
-}
+};

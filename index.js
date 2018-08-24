@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const md5File = require("md5-file");
+const sendMail = require("./sendmail");
 
 const myroutes = require(`./routes/myroutes`);
 
@@ -9,6 +10,7 @@ const P2pServer = require("./p2p-server");
 const TransactionPool = require("./Register/transaction-pool");
 const Miner = require("./miner");
 const ChainUtil = require("./chain-util");
+var utils = require("./utils/writer");
 
 const Register = require("./Register");
 const SignDoc = require("./Signdoc");
@@ -51,33 +53,58 @@ app.get("/register", (req, res) => {
  * signdoc SignDocObject Document to sign (optional)
  * returns SignDocResponse
  **/
-exports.signdocPOST = function(signdoc, file_path) {
+exports.signdocPOST = function(signdoc, file_name) {
   return new Promise(function(resolve, reject) {
     var publicKey = signdoc.publicKey.replace(/\\n/g, "\n").trim();
     var privateKey = signdoc.privateKey.replace(/\\n/g, "\n").trim();
-
-    md5File(file_path, (err, hash) => {
-      const sign = new SignDoc(publicKey, privateKey);
-      const transaction = sign.createTransaction(
-        hash,
-        ChainUtil.signData(hash, privateKey),
-        signdoc.signers,
-        bc,
-        tp
-      );
-      p2pServer.broadcastTransaction(transaction);
-      miner.mine();
-      //Search signers id from emails and send them email
+    if (ChainUtil.IfUserExists(bc.chain, publicKey) == undefined) {
+      console.log("Trouble!");
       var examples = {};
       examples["application/json"] = {
-        doc_hash: hash
+        msg: "No such user in the system. Check your public key!"
       };
       if (Object.keys(examples).length > 0) {
         resolve(examples[Object.keys(examples)[0]]);
       } else {
         resolve();
       }
-    });
+    } else {
+      md5File("./documents/" + file_name, (err, hash) => {
+        const sign = new SignDoc(publicKey, privateKey);
+        const transaction = sign.createTransaction(
+          hash,
+          ChainUtil.signData(hash, privateKey),
+          signdoc.signers,
+          bc,
+          tp
+        );
+        p2pServer.broadcastTransaction(transaction);
+        miner.mine();
+        if (signdoc.signers !== "-") {
+          var recip = signdoc.signers.split(", ");
+          recip = ChainUtil.removeArrayItem(
+            recip,
+            ChainUtil.findEmailByPublicKey(bc.chain, publicKey)
+          );
+          sendMail.notifySigners(
+            ChainUtil.findFIOByPublicKey(bc.chain, publicKey),
+            file_name,
+            recip,
+            file_name,
+            "./documents/" + file_name
+          );
+        }
+        var examples = {};
+        examples["application/json"] = {
+          doc_hash: hash
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      });
+    }
   });
 };
 
@@ -89,30 +116,43 @@ exports.signdocPOST = function(signdoc, file_path) {
  **/
 exports.registerPOST = function(user) {
   return new Promise(function(resolve, reject) {
-    var keypair = JSON.parse(ChainUtil.genKeyPair());
-
-    var publicKey = keypair.pubpem.replace(/\\n/g, "\n").trim();
-    var privateKey = keypair.privpem.replace(/\\n/g, "\n").trim();
-
-    const reg = new Register(publicKey, privateKey);
-    const transaction = reg.createTransaction(
-      user.mobilePhone,
-      user.email,
-      user.fio,
-      bc,
-      tp
-    );
-    p2pServer.broadcastTransaction(transaction);
-    miner.mine();
-    var examples = {};
-    examples["application/json"] = {
-      privateKey: keypair.pubpem,
-      publicKey: keypair.privpem
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+    if (ChainUtil.IfEmailExists(bc.chain, user.email) !== undefined) {
+      console.log("Trouble!");
+      var examples = {};
+      examples["application/json"] = {
+        msg: "There is already such email in the system! Try another email"
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
     } else {
-      resolve();
+      var keypair = JSON.parse(ChainUtil.genKeyPair());
+
+      var publicKey = keypair.pubpem.replace(/\\n/g, "\n").trim();
+      var privateKey = keypair.privpem.replace(/\\n/g, "\n").trim();
+
+      const reg = new Register(publicKey, privateKey);
+      const transaction = reg.createTransaction(
+        user.mobilePhone,
+        user.email,
+        user.fio,
+        bc,
+        tp
+      );
+      p2pServer.broadcastTransaction(transaction);
+      miner.mine();
+      var examples = {};
+      examples["application/json"] = {
+        privateKey: keypair.privpem,
+        publicKey: keypair.pubpem
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
     }
   });
 };
