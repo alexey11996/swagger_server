@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const md5File = require("md5-file");
-const sendMail = require("./sendmail");
+const Nodemailer = require("./sendmail");
 
 const myroutes = require(`./routes/myroutes`);
 
@@ -69,41 +69,88 @@ exports.signdocPOST = function(signdoc, file_name) {
         resolve();
       }
     } else {
-      md5File("./documents/" + file_name, (err, hash) => {
-        const sign = new SignDoc(publicKey, privateKey);
-        const transaction = sign.createTransaction(
-          hash,
-          ChainUtil.signData(hash, privateKey),
-          signdoc.signers,
-          bc,
-          tp
-        );
-        p2pServer.broadcastTransaction(transaction);
-        miner.mine();
-        if (signdoc.signers !== "-") {
-          var recip = signdoc.signers.split(", ");
-          recip = ChainUtil.removeArrayItem(
-            recip,
-            ChainUtil.findEmailByPublicKey(bc.chain, publicKey)
-          );
-          sendMail.notifySigners(
-            ChainUtil.findFIOByPublicKey(bc.chain, publicKey),
-            file_name,
-            recip,
-            file_name,
-            "./documents/" + file_name
-          );
-        }
+      var emailstoIds = ChainUtil.EmailsToIds(bc.chain, signdoc.signers);
+      // Send emails to another signers in link from email message
+      if (emailstoIds == -1) {
+        console.log("Trouble!");
         var examples = {};
         examples["application/json"] = {
-          doc_hash: hash
+          msg:
+            "There is no one or several emails in the system. Check your email list again!"
         };
         if (Object.keys(examples).length > 0) {
           resolve(examples[Object.keys(examples)[0]]);
         } else {
           resolve();
         }
-      });
+      } else {
+        md5File("./documents/" + file_name, (err, hash) => {
+          var signature = ChainUtil.signData(hash, privateKey);
+          if (
+            ChainUtil.CountblocksFromOneSigner(bc.chain, hash, signature) >= 1
+          ) {
+            console.log("Trouble!");
+            var examples = {};
+            examples["application/json"] = {
+              msg: "You cannot sign one document 2+ times!"
+            };
+            if (Object.keys(examples).length > 0) {
+              resolve(examples[Object.keys(examples)[0]]);
+            } else {
+              resolve();
+            }
+          } else {
+            const sign = new SignDoc(publicKey, privateKey);
+            const transaction = sign.createTransaction(
+              hash,
+              signature,
+              emailstoIds,
+              bc,
+              tp
+            );
+            p2pServer.broadcastTransaction(transaction);
+            miner.mine();
+            var nm = new Nodemailer();
+
+            var recip = signdoc.signers.split(", ");
+            recip = ChainUtil.removeArrayItem(
+              recip,
+              ChainUtil.findEmailByPublicKey(bc.chain, publicKey)
+            );
+            // nm.notifySigners(
+            //   ChainUtil.findFIOByPublicKey(bc.chain, publicKey),
+            //   file_name,
+            //   recip,
+            //   file_name,
+            //   "./documents/" + file_name
+            // );
+
+            //console.log(ChainUtil.CountBlocksWithSameHash(bc.chain, hash));
+            if (
+              ChainUtil.CountBlocksWithSameHash(bc.chain, hash) ==
+              emailstoIds.length
+            ) {
+              //console.log(ChainUtil.GetDocSignFios(bc.chain, hash));
+              nm.notifySigEnd(
+                signdoc.signers,
+                file_name,
+                ChainUtil.GetDocSignFios(bc.chain, hash),
+                file_name,
+                "./documents/" + file_name
+              );
+            }
+            var examples = {};
+            examples["application/json"] = {
+              doc_hash: hash
+            };
+            if (Object.keys(examples).length > 0) {
+              resolve(examples[Object.keys(examples)[0]]);
+            } else {
+              resolve();
+            }
+          }
+        });
+      }
     }
   });
 };

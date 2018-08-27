@@ -100,7 +100,7 @@ class ChainUtil {
   static EmailsToIds(str, params) {
     var arr = params.split(", ");
     var id_arr = [];
-    for (i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       var res = str.find(
         a =>
           a.data &&
@@ -110,7 +110,11 @@ class ChainUtil {
               b.outputs[0].email == arr[i]
           )
       );
-      id_arr.push(res.hash);
+      try {
+        id_arr.push(res.hash);
+      } catch (e) {
+        return -1;
+      }
     }
     return id_arr;
   }
@@ -151,6 +155,115 @@ class ChainUtil {
       }
     }
     return arr;
+  }
+
+  static CountBlocksWithSameHash(str, hash) {
+    var res = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash
+        )
+    );
+    return res.length;
+  }
+
+  static ConvertPubKeysToIds(str, hash) {
+    var keypairs = [];
+    var id_arr = [];
+    var res_senders = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash
+        )
+    );
+
+    for (let a of res_senders) {
+      keypairs.push(a.data[0].input.transaction_sender);
+    }
+
+    for (let i = 0; i < keypairs.length; i++) {
+      var res = str.find(
+        a =>
+          a.data &&
+          a.data.find(
+            b =>
+              b.input.transaction_type == "register_transaction" &&
+              b.outputs[0].user == keypairs[i]
+          )
+      );
+      try {
+        id_arr.push(res.hash);
+      } catch (e) {
+        return -1;
+      }
+    }
+    return id_arr;
+  }
+
+  static GetDocSignFios(str, hash) {
+    var keypairs = [];
+    var id_arr = [];
+    var res_senders = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash
+        )
+    );
+
+    for (let a of res_senders) {
+      keypairs.push(a.data[0].input.transaction_sender);
+    }
+
+    for (let i = 0; i < keypairs.length; i++) {
+      var res = str.find(
+        a =>
+          a.data &&
+          a.data.find(
+            b =>
+              b.input.transaction_type == "register_transaction" &&
+              b.outputs[0].user == keypairs[i]
+          )
+      );
+      try {
+        id_arr.push(res.data[0].outputs[0].fio);
+      } catch (e) {
+        return -1;
+      }
+    }
+    return id_arr;
+  }
+
+  // static CompareArrs(arr1, arr2) {
+  //   var arr1 = JSON.parse(arr1);
+  //   var arr2 = Object.values(arr2);
+  //   console.log(typeof arr2);
+  //   arr1.length === arr2.length &&
+  //     arr1.sort().every(function(value, index) {
+  //       return value === arr2.sort()[index];
+  //     });
+  // }
+
+  static CountblocksFromOneSigner(str, hash, signature) {
+    var res = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash &&
+            b.outputs[0].doc_signature == signature
+        )
+    );
+    return res.length;
   }
 }
 
