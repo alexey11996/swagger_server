@@ -194,9 +194,12 @@ var str = [
 //     )
 // );
 
-console.log(ConvertPubKeysToIds(str, "12331345"));
+var emails = "alex@mail.ru, tom@gmail.com, ivan@mail.ru";
+var x = emails.split(", ");
+//console.log(typeof x);
+//console.log(typeof ConvertPubKeysToIds(str, "12331345"));
 
-function GetDocSignFios(str, hash) {
+function ConvertPubKeysToIds(str, hash) {
   var keypairs = [];
   var id_arr = [];
   var res_senders = str.filter(
@@ -208,11 +211,9 @@ function GetDocSignFios(str, hash) {
           b.outputs[0].doc_hash == hash
       )
   );
-
   for (let a of res_senders) {
     keypairs.push(a.data[0].input.transaction_sender);
   }
-
   for (let i = 0; i < keypairs.length; i++) {
     var res = str.find(
       a =>
@@ -224,10 +225,23 @@ function GetDocSignFios(str, hash) {
         )
     );
     try {
-      id_arr.push(res.data[0].outputs[0].fio);
+      id_arr.push(res.hash);
     } catch (e) {
       return -1;
     }
   }
   return id_arr;
 }
+
+var a1 =
+  "00c45c39000cf022a7b8a1ce0683428f85e30d87264c275d64bee85cd2bab466,00b1b069b09798c3eb413ca18e1d08f06fa0f35f9ba7dfd66776a0466ecd29ee";
+var a2 =
+  "00b1b069b09798c3eb413ca18e1d08f06fa0f35f9ba7dfd66776a0466ecd29ee,00c45c39000cf022a7b8a1ce0683428f85e30d87264c275d64bee85cd2bab466";
+var arr1 = a1.split(",");
+var arr2 = a2.split(",");
+console.log(
+  arr1.length === arr2.length &&
+    arr1.sort().every(function(value, index) {
+      return value === arr2.sort()[index];
+    })
+);

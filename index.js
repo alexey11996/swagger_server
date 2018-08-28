@@ -55,13 +55,19 @@ app.get("/register", (req, res) => {
  **/
 exports.signdocPOST = function(signdoc, file_name) {
   return new Promise(function(resolve, reject) {
+    let signer = "";
+    if (signdoc.signer == "0") {
+      signer = "inviteSigner";
+    } else if (signdoc.signer == "1") {
+      signer = "firstSigner";
+    }
     var publicKey = signdoc.publicKey.replace(/\\n/g, "\n").trim();
     var privateKey = signdoc.privateKey.replace(/\\n/g, "\n").trim();
     if (ChainUtil.IfUserExists(bc.chain, publicKey) == undefined) {
       console.log("Trouble!");
       var examples = {};
       examples["application/json"] = {
-        msg: "No such user in the system. Check your public key!"
+        msg: "No such user in the system. Check your keypair!"
       };
       if (Object.keys(examples).length > 0) {
         resolve(examples[Object.keys(examples)[0]]);
@@ -70,7 +76,9 @@ exports.signdocPOST = function(signdoc, file_name) {
       }
     } else {
       var emailstoIds = ChainUtil.EmailsToIds(bc.chain, signdoc.signers);
-      // Send emails to another signers in link from email message
+      var emailstoIds_arr = emailstoIds.split(", ");
+      //console.log(emailstoIds_arr);
+      // Send emails to another signers in the link from email message
       if (emailstoIds == -1) {
         console.log("Trouble!");
         var examples = {};
@@ -111,33 +119,43 @@ exports.signdocPOST = function(signdoc, file_name) {
             p2pServer.broadcastTransaction(transaction);
             miner.mine();
             var nm = new Nodemailer();
-
-            var recip = signdoc.signers.split(", ");
-            recip = ChainUtil.removeArrayItem(
-              recip,
-              ChainUtil.findEmailByPublicKey(bc.chain, publicKey)
-            );
-            // nm.notifySigners(
-            //   ChainUtil.findFIOByPublicKey(bc.chain, publicKey),
-            //   file_name,
-            //   recip,
-            //   file_name,
-            //   "./documents/" + file_name
-            // );
-
-            //console.log(ChainUtil.CountBlocksWithSameHash(bc.chain, hash));
+            // if false - send email, if true - from invite link,
+            /*
+            Отправлять эмэйлы нужно обязательно всегда в обоих случаях, но вводим доп. параметр fromInvite 
+            чтобы понимать отправлять эмейл или нет
+            Пример ссылки: localhost:5500?firstSigner=0&signers='email1@mailru, email2@mail2, email3@mail.ru'
+            */
+            if (signer == "firstSigner") {
+              console.log("firstSigner");
+              var recip = signdoc.signers.split(", ");
+              recip = ChainUtil.removeArrayItem(
+                recip,
+                ChainUtil.findEmailByPublicKey(bc.chain, publicKey)
+              );
+              // nm.notifySigners(
+              //   ChainUtil.findFIOByPublicKey(bc.chain, publicKey),
+              //   file_name,
+              //   recip,
+              //   file_name,
+              //   "./documents/" + file_name
+              // );
+            }
             if (
               ChainUtil.CountBlocksWithSameHash(bc.chain, hash) ==
-              emailstoIds.length
+              emailstoIds_arr.length
             ) {
-              //console.log(ChainUtil.GetDocSignFios(bc.chain, hash));
-              nm.notifySigEnd(
-                signdoc.signers,
-                file_name,
-                ChainUtil.GetDocSignFios(bc.chain, hash),
-                file_name,
-                "./documents/" + file_name
-              );
+              var convert = ChainUtil.ConvertPubKeysToIds(bc.chain, hash);
+              //console.log(emailstoIds_arr);
+              if (ChainUtil.CompareArrs(convert, emailstoIds)) {
+                console.log("Arrays are the same");
+              }
+              // nm.notifySigEnd(
+              //   signdoc.signers,
+              //   file_name,
+              //   ChainUtil.GetDocSignFios(bc.chain, hash),
+              //   file_name,
+              //   "./documents/" + file_name
+              // );
             }
             var examples = {};
             examples["application/json"] = {

@@ -116,7 +116,7 @@ class ChainUtil {
         return -1;
       }
     }
-    return id_arr;
+    return id_arr.join(", ");
   }
 
   static IfUserExists(str, publicKey) {
@@ -242,15 +242,55 @@ class ChainUtil {
     return id_arr;
   }
 
-  // static CompareArrs(arr1, arr2) {
-  //   var arr1 = JSON.parse(arr1);
-  //   var arr2 = Object.values(arr2);
-  //   console.log(typeof arr2);
-  //   arr1.length === arr2.length &&
-  //     arr1.sort().every(function(value, index) {
-  //       return value === arr2.sort()[index];
-  //     });
-  // }
+  static ConvertPubKeysToIds(str, hash) {
+    var keypairs = [];
+    var id_arr = [];
+    var res_senders = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash
+        )
+    );
+
+    for (let a of res_senders) {
+      keypairs.push(a.data[0].input.transaction_sender);
+    }
+
+    for (let i = 0; i < keypairs.length; i++) {
+      var res = str.find(
+        a =>
+          a.data &&
+          a.data.find(
+            b =>
+              b.input.transaction_type == "register_transaction" &&
+              b.outputs[0].user == keypairs[i]
+          )
+      );
+      try {
+        id_arr.push(res.hash);
+      } catch (e) {
+        return -1;
+      }
+    }
+    return id_arr.join(", ");
+  }
+
+  static CompareArrs(arr1, arr2) {
+    var arr1_n = arr1.split(", ");
+    var arr2_n = arr2.split(", ");
+    console.log(arr1_n + "  " + arr2_n);
+    if (
+      arr1_n.length == arr2_n.length &&
+      arr1_n.every(v => arr2_n.indexOf(v) >= 0)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   static CountblocksFromOneSigner(str, hash, signature) {
     var res = str.filter(
