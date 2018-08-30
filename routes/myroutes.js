@@ -25,6 +25,17 @@ const upload = multer({
 
 //router.get(`/test`, (req, res) => res.json({ msg: "default Works" }));
 
+router.post("/checksignatures", upload.single("document"), (req, res, next) => {
+  var document = req.body;
+  Default.checksignaturesPOST(document, req.file.filename)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
 router.post("/signdoc", upload.single("document"), (req, res, next) => {
   var signdoc = req.body;
   Default.signdocPOST(signdoc, req.file.filename)
@@ -87,17 +98,6 @@ router.post("/checkmysignature", (req, res) => {
 router.post("/checksignature", (req, res, next) => {
   var checksign = req.body;
   Default.checksignaturePOST(checksign)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
-router.post("/checksignatures", (req, res, next) => {
-  var document = req.body;
-  Default.checksignaturesPOST(document)
     .then(function(response) {
       utils.writeJson(res, response);
     })

@@ -48,6 +48,50 @@ app.get("/register", (req, res) => {
 // PORT=3002 P2P_PORT=5002 PEERS=ws://localhost:5001 npm run dev
 
 /**
+ * Check all signatures existense (Use Case 6)
+ *
+ * document File Check if system has all signatures for the uploaded document (optional)
+ * returns List
+ **/
+exports.checksignaturesPOST = function(document, file_name) {
+  return new Promise(function(resolve, reject) {
+    md5File("./documents/" + file_name, (err, hash) => {
+      var docsignersIds = ChainUtil.GetDocSignersIds(bc.chain, hash);
+      var fiosByHash = ChainUtil.GetDocSignFios(bc.chain, hash);
+      if (
+        ChainUtil.CompareArrs(
+          ChainUtil.ConvertPubKeysToIds(bc.chain, hash),
+          docsignersIds
+        )
+      ) {
+        //var fiosByIds = ChainUtil.GetDocSignFiosByIds(bc.chain, docsignersIds);
+        var examples = {};
+        examples["application/json"] = {
+          msg: "Documents has signed by all signers!",
+          fios: fiosByHash
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      } else {
+        var examples = {};
+        examples["application/json"] = {
+          msg: "Document has not signed by all signers!",
+          fios: fiosByHash
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      }
+    });
+  });
+};
+
+/**
  * Sign new document (Use Case 5)
  *
  * signdoc SignDocObject Document to sign (optional)
@@ -148,14 +192,14 @@ exports.signdocPOST = function(signdoc, file_name) {
               //console.log(emailstoIds_arr);
               if (ChainUtil.CompareArrs(convert, emailstoIds)) {
                 console.log("Arrays are the same");
+                // nm.notifySigEnd(
+                //   signdoc.signers,
+                //   file_name,
+                //   ChainUtil.GetDocSignFios(bc.chain, hash),
+                //   file_name,
+                //   "./documents/" + file_name
+                // );
               }
-              // nm.notifySigEnd(
-              //   signdoc.signers,
-              //   file_name,
-              //   ChainUtil.GetDocSignFios(bc.chain, hash),
-              //   file_name,
-              //   "./documents/" + file_name
-              // );
             }
             var examples = {};
             examples["application/json"] = {
@@ -287,24 +331,6 @@ exports.checksignaturePOST = function(checksign) {
     examples["application/json"] = {
       check_status: false
     };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
- * Check all signatures existense (Use Case 6)
- *
- * document File Check if system has all signatures for the uploaded document (optional)
- * returns List
- **/
-exports.checksignaturesPOST = function(document) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = ["", ""];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

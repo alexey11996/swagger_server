@@ -170,6 +170,19 @@ class ChainUtil {
     return res.length;
   }
 
+  static GetDocSignersIds(str, hash) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash
+        )
+    );
+    return res.data[0].outputs[0].signers;
+  }
+
   static ConvertPubKeysToIds(str, hash) {
     var keypairs = [];
     var id_arr = [];
@@ -242,6 +255,24 @@ class ChainUtil {
     return id_arr;
   }
 
+  static GetDocSignFiosByIds(str, ids) {
+    var id_arr = ids.split(", ");
+    var res_arr = [];
+    for (let i = 0; i < id_arr.length; i++) {
+      var res = str.find(
+        a =>
+          a.hash == id_arr[i] &&
+          a.data.find(b => b.input.transaction_type == "register_transaction")
+      );
+      try {
+        res_arr.push(res.data[0].outputs[0].fio);
+      } catch (e) {
+        return -1;
+      }
+    }
+    return res_arr;
+  }
+
   static ConvertPubKeysToIds(str, hash) {
     var keypairs = [];
     var id_arr = [];
@@ -281,7 +312,7 @@ class ChainUtil {
   static CompareArrs(arr1, arr2) {
     var arr1_n = arr1.split(", ");
     var arr2_n = arr2.split(", ");
-    console.log(arr1_n + "  " + arr2_n);
+    //console.log(arr1_n + "  " + arr2_n);
     if (
       arr1_n.length == arr2_n.length &&
       arr1_n.every(v => arr2_n.indexOf(v) >= 0)
