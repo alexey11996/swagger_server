@@ -25,6 +25,40 @@ const upload = multer({
 
 //router.get(`/test`, (req, res) => res.json({ msg: "default Works" }));
 
+router.post("/getmypublic", (req, res, next) => {
+  var email = req.body.email;
+  var change = req.body.change;
+  Default.getmypublicPOST(email, change)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
+router.post("/isdoctrue", upload.single("document"), (req, res, next) => {
+  var isdoctrue = req.body;
+  Default.isdoctruePOST(isdoctrue, req.file.filename)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
+router.post("/getdate", upload.single("document"), (req, res, next) => {
+  var getdate = req.body;
+  Default.getdatePOST(getdate, req.file.filename)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
 router.post("/checksignatures", upload.single("document"), (req, res, next) => {
   var document = req.body;
   Default.checksignaturesPOST(document, req.file.filename)
@@ -59,8 +93,9 @@ router.post("/register", (req, res, next) => {
 });
 
 router.post("/changekeys", (req, res, next) => {
-  var publicKey = req.body.publicKey;
-  Default.changekeysPOST(publicKey)
+  var changekeys = req.body;
+  //console.log(changekeys);
+  Default.changekeysPOST(changekeys)
     .then(function(response) {
       utils.writeJson(res, response);
     })
@@ -106,42 +141,9 @@ router.post("/checksignature", (req, res, next) => {
     });
 });
 
-router.post("/getdate", (req, res, next) => {
-  var getdate = req.body;
-  Default.getdatePOST(getdate)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
-router.post("/getmypublic", (req, res, next) => {
-  var email = req.body.publicKey;
-  Default.getmypublicPOST(email)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
 router.post("/givecert", (req, res, next) => {
   var publicKey = req.body.publicKey;
   Default.givecertPOST(publicKey)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
-router.post("/isdoctrue", (req, res, next) => {
-  var isdoctrue = req.body;
-  Default.isdoctruePOST(isdoctrue)
     .then(function(response) {
       utils.writeJson(res, response);
     })

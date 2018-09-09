@@ -38,38 +38,38 @@ class ChainUtil {
     return sign.sign(privateKey, "hex");
   }
   //Hashes list, data - bc.chain
-  static extractHash(data) {
-    var documents = [];
-    for (let a of data) {
-      if (!a.data) {
-        continue;
-      }
+  // static extractHash(data) {
+  //   var documents = [];
+  //   for (let a of data) {
+  //     if (!a.data) {
+  //       continue;
+  //     }
 
-      for (let b of a.data) {
-        if (!b.outputs) {
-          continue;
-        }
+  //     for (let b of a.data) {
+  //       if (!b.outputs) {
+  //         continue;
+  //       }
 
-        for (let c of b.outputs) {
-          if ("document" in c) {
-            documents.push(c.document);
-          }
-        }
-      }
-    }
+  //       for (let c of b.outputs) {
+  //         if ("document" in c) {
+  //           documents.push(c.document);
+  //         }
+  //       }
+  //     }
+  //   }
 
-    return documents;
-  }
+  //   return documents;
+  // }
   // str - bc.chain, document - md5 hash
-  static findDoc(str, document) {
-    return str.find(
-      a =>
-        a.data &&
-        a.data.find(
-          b => b.outputs && b.outputs.find(c => c.document == document)
-        )
-    );
-  }
+  // static findDoc(str, document) {
+  //   return str.find(
+  //     a =>
+  //       a.data &&
+  //       a.data.find(
+  //         b => b.outputs && b.outputs.find(c => c.document == document)
+  //       )
+  //   );
+  // }
   //str - blockchain chain
   static findFIOByPublicKey(str, publicKey) {
     var res = str.find(
@@ -82,6 +82,87 @@ class ChainUtil {
         )
     );
     return res.data[0].outputs[0].fio;
+  }
+
+  static findIdbyPublicKey(str, publicKey) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "register_transaction" &&
+            b.outputs[0].user == publicKey
+        )
+    );
+    return res.hash;
+  }
+
+  static findPubkeyByEmail(str, email) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "register_transaction" &&
+            b.outputs[0].email == email
+        )
+    );
+    if (res == undefined) {
+      return -1;
+    } else {
+      return res.data[0].outputs[0].user;
+    }
+  }
+
+  static findIDByEmail(str, email) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "register_transaction" &&
+            b.outputs[0].email == email
+        )
+    );
+    if (res == undefined) {
+      return -1;
+    } else {
+      return res.hash;
+    }
+  }
+
+  static findCKByID(str, user_id) {
+    var res = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "change_keypair" &&
+            b.outputs[0].user_id == user_id
+        )
+    );
+    console.log(res);
+    if (res == undefined) {
+      return -1;
+    } else {
+      let timestamps = [];
+      for (let t of res) {
+        timestamps.push(t.data[0].input.timestamp);
+      }
+      timestamps.sort((a, b) => b - a); // first - the biggest
+      console.log(timestamps);
+      var res1 = str.find(
+        a =>
+          a.data &&
+          a.data.find(
+            b =>
+              b.input.transaction_type == "change_keypair" &&
+              b.outputs[0].user_id == user_id &&
+              a.data[0].input.timestamp == timestamps[0]
+          )
+      );
+      return res1.data[0].outputs[0].new_public;
+    }
   }
 
   static findEmailByPublicKey(str, publicKey) {
@@ -142,6 +223,35 @@ class ChainUtil {
         )
     );
   }
+
+  static ReturnDate(str, email, doc_hash) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "register_transaction" &&
+            b.outputs[0].email == email
+        )
+    );
+    var pubkey = res.data[0].outputs[0].user;
+    var res_1 = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].user == pubkey &&
+            b.outputs[0].doc_hash == doc_hash
+        )
+    );
+    if (res_1 == undefined) {
+      return -1;
+    } else {
+      return res_1.data[0].input.timestamp;
+    }
+  }
+
   // For use removeArrayItem(arrayName, ElementValue)
   static removeArrayItem(arr) {
     var what,

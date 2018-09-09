@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const md5File = require("md5-file");
+const fs = require("fs");
 const Nodemailer = require("./sendmail");
 
 const myroutes = require(`./routes/myroutes`);
@@ -14,6 +15,7 @@ var utils = require("./utils/writer");
 
 const Register = require("./Register");
 const SignDoc = require("./Signdoc");
+const ChangeKeys = require("./ChangeKeys");
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,6 +50,200 @@ app.get("/register", (req, res) => {
 // PORT=3002 P2P_PORT=5002 PEERS=ws://localhost:5001 npm run dev
 
 /**
+ * Show my public key (Use Case 12)
+ *
+ * email String Send user email
+ * returns inline_response_200_3
+ **/
+exports.getmypublicPOST = function(email, change) {
+  return new Promise(function(resolve, reject) {
+    if (change == "0") {
+      var pubkey = ChainUtil.findPubkeyByEmail(bc.chain, email);
+      if (pubkey == -1) {
+        var examples = {};
+        examples["application/json"] = {
+          msg: "No such email in the system"
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      } else if (pubkey != -1) {
+        pubkey = pubkey.replace(/\n/g, "\\n");
+        var examples = {};
+        examples["application/json"] = {
+          msg: "This is public key from register time",
+          publicKey: pubkey
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      }
+    } else if (change == "1") {
+      var id = ChainUtil.findIDByEmail(bc.chain, email);
+      if (id == -1) {
+        var examples = {};
+        examples["application/json"] = {
+          msg: "No such email in the system"
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      } else if (id != -1) {
+        var newPub = ChainUtil.findCKByID(bc.chain, id);
+        if (newPub == -1) {
+          var examples = {};
+          examples["application/json"] = {
+            msg: "No change key blocks in the system"
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        } else if (newPub != -1) {
+          newPub = newPub.replace(/\n/g, "\\n");
+          var examples = {};
+          examples["application/json"] = {
+            publicKey: newPub
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        }
+      }
+    }
+  });
+};
+
+/**
+ * Check if document is true (Use Case 10)
+ *
+ * isdoctrue IsDocTrue Send document for check is it true or changed since signing (optional)
+ * returns IsDocTrueResponse
+ **/
+exports.isdoctruePOST = function(isdoctrue, file_name) {
+  return new Promise(function(resolve, reject) {
+    var email = isdoctrue.email;
+    if (ChainUtil.IfEmailExists(bc.chain, email) == undefined) {
+      console.log("Trouble");
+      var examples = {};
+      examples["application/json"] = {
+        msg: "There is no user with such email in the system."
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    } else {
+      md5File("./documents/" + file_name, (err, hash) => {
+        console.log(email + " " + hash);
+        var resdate = ChainUtil.ReturnDate(bc.chain, email, hash);
+        if (resdate == -1) {
+          console.log("Trouble");
+          var examples = {};
+          examples["application/json"] = {
+            msg: "There is no such doc in the system.",
+            result: false
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        } else {
+          var examples = {};
+          examples["application/json"] = {
+            msg: "Document is true",
+            result: true
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        }
+      });
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    }
+  });
+};
+
+/**
+ * Get document signature date (Use Case 9)
+ *
+ * getdate GetDate Send document and email (optional)
+ * returns GetDateResponse
+ **/
+exports.getdatePOST = function(getdate, file_name) {
+  return new Promise(function(resolve, reject) {
+    var email = getdate.email;
+    if (ChainUtil.IfEmailExists(bc.chain, email) == undefined) {
+      console.log("Trouble");
+      var examples = {};
+      examples["application/json"] = {
+        msg: "There is no user with such email in the system."
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    } else {
+      md5File("./documents/" + file_name, (err, hash) => {
+        console.log(email + " " + hash);
+        var resdate = ChainUtil.ReturnDate(bc.chain, email, hash);
+        if (resdate == -1) {
+          console.log("Trouble");
+          var examples = {};
+          examples["application/json"] = {
+            msg: "There is no such doc in the system."
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        } else {
+          var examples = {};
+          examples["application/json"] = {
+            date: resdate
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        }
+      });
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    }
+  });
+};
+
+/**
  * Check all signatures existense (Use Case 6)
  *
  * document File Check if system has all signatures for the uploaded document (optional)
@@ -75,6 +271,10 @@ exports.checksignaturesPOST = function(document, file_name) {
         } else {
           resolve();
         }
+        fs.unlink("./documents/" + file_name, function(err) {
+          if (err) return console.log(err);
+          console.log(`file ${file_name} deleted`);
+        });
       } else {
         var examples = {};
         examples["application/json"] = {
@@ -86,6 +286,10 @@ exports.checksignaturesPOST = function(document, file_name) {
         } else {
           resolve();
         }
+        fs.unlink("./documents/" + file_name, function(err) {
+          if (err) return console.log(err);
+          console.log(`file ${file_name} deleted`);
+        });
       }
     });
   });
@@ -118,6 +322,10 @@ exports.signdocPOST = function(signdoc, file_name) {
       } else {
         resolve();
       }
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
     } else {
       var emailstoIds = ChainUtil.EmailsToIds(bc.chain, signdoc.signers);
       var emailstoIds_arr = emailstoIds.split(", ");
@@ -212,6 +420,10 @@ exports.signdocPOST = function(signdoc, file_name) {
             }
           }
         });
+        fs.unlink("./documents/" + file_name, function(err) {
+          if (err) return console.log(err);
+          console.log(`file ${file_name} deleted`);
+        });
       }
     }
   });
@@ -272,9 +484,46 @@ exports.registerPOST = function(user) {
  * publicKey String Send user present public key
  * no response value expected for this operation
  **/
-exports.changekeysPOST = function(publicKey) {
+exports.changekeysPOST = function(changekeys) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var publicKey = changekeys.publicKey.replace(/\\n/g, "\n").trim();
+    var privateKey = changekeys.privateKey.replace(/\\n/g, "\n").trim();
+    if (ChainUtil.IfUserExists(bc.chain, publicKey) == undefined) {
+      var examples = {};
+      examples["application/json"] = {
+        msg: "No user with such public key in the system"
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+    } else {
+      var email = ChainUtil.findEmailByPublicKey(bc.chain, publicKey);
+      var keypair = JSON.parse(ChainUtil.genKeyPair());
+      var new_public = keypair.pubpem.replace(/\\n/g, "\n").trim();
+      const chKeys = new ChangeKeys(publicKey, privateKey);
+      const transaction = chKeys.createTransaction(
+        ChainUtil.findIdbyPublicKey(bc.chain, publicKey),
+        publicKey,
+        new_public,
+        bc,
+        tp
+      );
+      p2pServer.broadcastTransaction(transaction);
+      miner.mine();
+      var examples = {};
+      examples["application/json"] = {
+        msg: "Success changing",
+        new_public: keypair.pubpem,
+        new_private: keypair.privpem
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+    }
   });
 };
 
@@ -340,46 +589,6 @@ exports.checksignaturePOST = function(checksign) {
 };
 
 /**
- * Get document signature date (Use Case 9)
- *
- * getdate GetDate Send document and email (optional)
- * returns GetDateResponse
- **/
-exports.getdatePOST = function(getdate) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = {
-      data: "54375855439857 // timestamp"
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
- * Show my public key (Use Case 12)
- *
- * email String Send user email
- * returns inline_response_200_3
- **/
-exports.getmypublicPOST = function(email) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = {
-      publicKey: "ufh38fh348r834ugh845g84h94k0"
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
  * Give certification authority to user (Use Case 1)
  *
  * publicKey String Send user publicKey
@@ -391,26 +600,6 @@ exports.givecertPOST = function(publicKey) {
     examples["application/json"] = {
       msg:
         "Request has been sent. Wait for admin response | No user with such publicKey in the system. Check your publickey"
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
- * Check if document is true (Use Case 10)
- *
- * isdoctrue IsDocTrue Send document for check is it true or changed since signing (optional)
- * returns IsDocTrueResponse
- **/
-exports.isdoctruePOST = function(isdoctrue) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = {
-      data: false
     };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
