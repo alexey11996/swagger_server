@@ -39,6 +39,7 @@ class P2pServer {
   messageHandler(socket) {
     socket.on("message", message => {
       const data = JSON.parse(message);
+      console.log(data);
       switch (data.type) {
         case MESSAGE_TYPES.chain:
           this.blockchain.replaceChain(data.chain);
@@ -54,6 +55,7 @@ class P2pServer {
   }
 
   sendChain(socket) {
+    console.log("Send chain to socket ");
     socket.send(
       JSON.stringify({
         type: MESSAGE_TYPES.chain,
@@ -63,6 +65,7 @@ class P2pServer {
   }
 
   sendTransaction(socket, transaction) {
+    console.log("Send transaction to socket ");
     socket.send(
       JSON.stringify({
         type: MESSAGE_TYPES.transaction,
@@ -82,12 +85,14 @@ class P2pServer {
   }
 
   broadcastClearTransactions() {
-    this.sockets.forEach(socket =>
-      socket.send(
-        JSON.stringify({
-          type: MESSAGE_TYPES.clear_transactions
-        })
-      )
+    this.sockets.forEach(
+      socket =>
+        socket.send(
+          JSON.stringify({
+            type: MESSAGE_TYPES.clear_transactions
+          })
+        ),
+      console.log("Send clear transaction to socket ")
     );
   }
 }

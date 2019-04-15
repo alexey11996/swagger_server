@@ -1,6 +1,6 @@
 const SHA256 = require("crypto-js/sha256");
 //const uuidV1 = require("uuid/v1");
-const ursa = require("ursa");
+const ursa = require("ursa-purejs");
 const crypto = require("crypto");
 
 class ChainUtil {
@@ -108,7 +108,7 @@ class ChainUtil {
         )
     );
     if (res == undefined) {
-      return -1;
+      return "-1";
     } else {
       return res.data[0].outputs[0].user;
     }
@@ -125,13 +125,13 @@ class ChainUtil {
         )
     );
     if (res == undefined) {
-      return -1;
+      return "-1";
     } else {
       return res.hash;
     }
   }
 
-  static findCKByID(str, user_id) {
+  static getTimeChanges(str, user_id) {
     var res = str.filter(
       a =>
         a.data &&
@@ -143,25 +143,82 @@ class ChainUtil {
     );
     console.log(res);
     if (res == undefined) {
-      return -1;
+      return "-1";
     } else {
       let timestamps = [];
       for (let t of res) {
         timestamps.push(t.data[0].input.timestamp);
       }
-      timestamps.sort((a, b) => b - a); // first - the biggest
-      console.log(timestamps);
-      var res1 = str.find(
-        a =>
-          a.data &&
-          a.data.find(
-            b =>
-              b.input.transaction_type == "change_keypair" &&
-              b.outputs[0].user_id == user_id &&
-              a.data[0].input.timestamp == timestamps[0]
-          )
-      );
-      return res1.data[0].outputs[0].new_public;
+      return timestamps;
+    }
+  }
+
+  // static findPubKeyByCKtimestamp(str, timestamp) {
+  //   var res = str.find(
+  //     a =>
+  //       a.data &&
+  //       a.data.find(
+  //         b =>
+  //           b.input.transaction_type == "change_keypair" &&
+  //           b.imput.timestamp == timestamp
+  //       )
+  //   );
+  //   return res.data[0].outputs[0].prev_public;
+  // }
+
+  // static findCKByID(str, user_id) {
+  //   var res = str.filter(
+  //     a =>
+  //       a.data &&
+  //       a.data.find(
+  //         b =>
+  //           b.input.transaction_type == "change_keypair" &&
+  //           b.outputs[0].user_id == user_id
+  //       )
+  //   );
+  //   //console.log(res + " res of findCKByID");
+  //   if (res.length == 0) {
+  //     return "-1";
+  //   } else {
+  //     let timestamps = [];
+  //     for (let t of res) {
+  //       timestamps.push(t.data[0].input.timestamp);
+  //     }
+  //     timestamps.sort((a, b) => b - a); // first - the biggest
+  //     //console.log(timestamps);
+  //     var res1 = str.find(
+  //       a =>
+  //         a.data &&
+  //         a.data.find(
+  //           b =>
+  //             b.input.transaction_type == "change_keypair" &&
+  //             b.outputs[0].user_id == user_id &&
+  //             a.data[0].input.timestamp == timestamps[0]
+  //         )
+  //     );
+  //     return res1.data[0].outputs[0].new_public;
+  //   }
+  // }
+
+  static findCKsByID(str, user_id) {
+    var res = str.filter(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "change_keypair" &&
+            b.outputs[0].user_id == user_id
+        )
+    );
+    if (res.length == 0) {
+      return "-1";
+    } else {
+      let new_pubs = {};
+      for (let t of res) {
+        new_pubs[t.data[0].input.timestamp] = t.data[0].outputs[0].new_public;
+      }
+      console.log(new_pubs);
+      return new_pubs;
     }
   }
 
@@ -194,7 +251,7 @@ class ChainUtil {
       try {
         id_arr.push(res.hash);
       } catch (e) {
-        return -1;
+        return "-1";
       }
     }
     return id_arr.join(", ");
@@ -223,6 +280,23 @@ class ChainUtil {
         )
     );
   }
+  static ReturnDateByPubKey(str, pubkey, doc_hash) {
+    var res_1 = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].user == pubkey &&
+            b.outputs[0].doc_hash == doc_hash
+        )
+    );
+    if (res_1 == undefined) {
+      return "-1";
+    } else {
+      return res_1.data[0].input.timestamp;
+    }
+  }
 
   static ReturnDate(str, email, doc_hash) {
     var res = str.find(
@@ -246,7 +320,7 @@ class ChainUtil {
         )
     );
     if (res_1 == undefined) {
-      return -1;
+      return "-1";
     } else {
       return res_1.data[0].input.timestamp;
     }
@@ -323,7 +397,7 @@ class ChainUtil {
       try {
         id_arr.push(res.hash);
       } catch (e) {
-        return -1;
+        return "-1";
       }
     }
     return id_arr;
@@ -359,7 +433,7 @@ class ChainUtil {
       try {
         id_arr.push(res.data[0].outputs[0].fio);
       } catch (e) {
-        return -1;
+        return "-1";
       }
     }
     return id_arr;
@@ -377,10 +451,28 @@ class ChainUtil {
       try {
         res_arr.push(res.data[0].outputs[0].fio);
       } catch (e) {
-        return -1;
+        return "-1";
       }
     }
     return res_arr;
+  }
+
+  static ReturnDocSignature(str, hash, pubkey) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "sign_transaction" &&
+            b.outputs[0].doc_hash == hash &&
+            b.outputs[0].user == pubkey
+        )
+    );
+    if (res == undefined) {
+      return "-1";
+    } else {
+      return res.data[0].outputs[0].doc_signature;
+    }
   }
 
   static ConvertPubKeysToIds(str, hash) {
@@ -413,7 +505,7 @@ class ChainUtil {
       try {
         id_arr.push(res.hash);
       } catch (e) {
-        return -1;
+        return "-1";
       }
     }
     return id_arr.join(", ");

@@ -7,7 +7,8 @@ const Nodemailer = require("./sendmail");
 const myroutes = require(`./routes/myroutes`);
 
 const Blockchain = require("./blockchain");
-const P2pServer = require("./p2p-server");
+//const P2pServer = require("./p2p-server");
+const p2p_new = require("./p2p-server-new");
 const TransactionPool = require("./Register/transaction-pool");
 const Miner = require("./miner");
 const ChainUtil = require("./chain-util");
@@ -18,16 +19,17 @@ const SignDoc = require("./Signdoc");
 const ChangeKeys = require("./ChangeKeys");
 
 var app = express();
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(bodyParser.text());
 
 const bc = new Blockchain();
 const tp = new TransactionPool();
-const p2pServer = new P2pServer(bc, tp);
-const miner = new Miner(bc, tp, p2pServer);
+//const p2pServer = new P2pServer(bc, tp);
+const p2pServ = new p2p_new(bc, tp);
+const miner = new Miner(bc, tp, p2pServ);
 
-const serverPort = process.env.PORT || 8080;
+const serverPort = process.env.PORT || 3000;
 
 app.use(`/myroutes`, myroutes);
 
@@ -35,19 +37,158 @@ app.listen(serverPort, () =>
   console.log(`Server running on port ${serverPort}`)
 );
 
-p2pServer.listen();
+//p2pServer.listen();
+p2pServ.listen();
 
-app.get("/", (req, res) => res.send("Hello!!!"));
+// app.get("/", (req, res) => res.send("Hello!!!"));
 
 app.get("/blocks", (req, res) => {
   res.json(bc.chain);
 });
 
-app.get("/register", (req, res) => {
-  res.json({ KeyPair: JSON.parse(ChainUtil.genKeyPair()) });
-});
+// app.get("/mine", (req, res) => {
+//   miner.mine();
+//   res.json(bc.chain);
+// });
+
+// app.get("/register", (req, res) => {
+//   res.json({ KeyPair: JSON.parse(ChainUtil.genKeyPair()) });
+// });
 
 // PORT=3002 P2P_PORT=5002 PEERS=ws://localhost:5001 npm run dev
+
+/**
+ * Check if my signature is true (Use Case 7)
+ *
+ * Вариант 1 - Пользователь имеет подписанные документы и меняет пару ключей
+ * после этого он хочет доказать, что подпсианные документы были подпсианы именно им
+ * а именно  - принадлежавшими на тот момент ему ключами, ныне утерянными/украденными и т.п.
+ *
+ * checkmysign CheckMySign Document for checking (optional)
+ * returns CheckMySignResponse
+ * 1 - Register 2 users
+ * 2 - Sign Document 2 times (each user)
+ * -- Request CheckMySignature - change = 0
+ * 3 - Change KeyaPair for one of these users
+ * 4 - Request CheckMySignature and see the result - change = 1
+ **/
+exports.checkmysignaturePOST = function(checkmysign, file_name) {
+  return new Promise(function(resolve, reject) {
+    var publicKey = checkmysign.publicKey.replace(/\\n/g, "\n").trim();
+    //var privateKey = signdoc.privateKey.replace(/\\n/g, "\n").trim();
+    if (ChainUtil.IfUserExists(bc.chain, publicKey) == undefined) {
+      var examples = {};
+      examples["application/json"] = {
+        msg:
+          "No sush user in the system or you signed document with old keypair"
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    } else {
+      //if (checkmysign.change == "0") {
+      md5File("./documents/" + file_name, (err, hash) => {
+        var signature = ChainUtil.ReturnDocSignature(bc.chain, hash, publicKey);
+        if (signature == "-1") {
+          var examples = {};
+          examples["application/json"] = {
+            msg: "No document signed by sudh keypair in the system"
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        } else if (signature != "-1") {
+          var bool_res = ChainUtil.verifySignature(publicKey, signature, hash);
+          var examples = {};
+          examples["application/json"] = {
+            check_status: bool_res
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        }
+      });
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+      //} else if (checkmysign.change == "1") {
+      // md5File("./documents/" + file_name, (err, hash) => {
+      //   var signature = ChainUtil.ReturnDocSignature(
+      //     bc.chain,
+      //     hash,
+      //     publicKey
+      //   );
+      //   if (signature == "-1") {
+      //     var examples = {};
+      //     examples["application/json"] = {
+      //       msg: "No such document in the system"
+      //     };
+      //     if (Object.keys(examples).length > 0) {
+      //       resolve(examples[Object.keys(examples)[0]]);
+      //     } else {
+      //       resolve();
+      //     }
+      //   } else if (signature != "-1") {
+      /* 1-Return timestamp1 of signed doc,
+            2-return timestamps of user changeKeys blocks - getTimeChanges();
+            -insert timestamp1 into array of timestamps and sort the array (asc)
+            -get index of signdoc timestamp in the array
+            3-take timestamp from array that first before signdoc timestamp,
+            (with the index before timestamp1's index)
+            4-return prev_public field from checksign block with that timestamp */
+      // var timestamp = ChainUtil.ReturnDateByPubKey(
+      //   bc.chain,
+      //   publicKey,
+      //   hash
+      // );
+      // console.log("Timestamp of signing - " + timestamp);
+      // var id = ChainUtil.findIdbyPublicKey(bc.chain, publicKey);
+      // console.log("user is - " + id);
+      // var timeChanges = ChainUtil.getTimeChanges(bc.chain, id);
+      // console.log("TimeChanges - " + timeChanges);
+      // timeChanges.push(timestamp);
+      // timeChanges.sort((a, b) => a - b); // asc
+      // var index = timeChanges.findIndex(timestamp);
+      // var res_timestamp = timeChanges[index + 1];
+      // var res_pubKey = ChainUtil.findPubKeyByCKtimestamp(
+      //   bc.chain,
+      //   res_timestamp
+      // );
+      // var bool_res = ChainUtil.verifySignature(
+      //   res_pubKey,
+      //   signature,
+      //   hash
+      // );
+      // var examples = {};
+      // examples["application/json"] = {
+      //   check_status: bool_res
+      // };
+      // if (Object.keys(examples).length > 0) {
+      //   resolve(examples[Object.keys(examples)[0]]);
+      // } else {
+      //   resolve();
+      // }
+      //   }
+      // });
+      // fs.unlink("./documents/" + file_name, function(err) {
+      //   if (err) return console.log(err);
+      //   console.log(`file ${file_name} deleted`);
+      // });
+      //}
+    }
+  });
+};
 
 /**
  * Show my public key (Use Case 12)
@@ -55,25 +196,25 @@ app.get("/register", (req, res) => {
  * email String Send user email
  * returns inline_response_200_3
  **/
-exports.getmypublicPOST = function(email, change) {
+exports.getmypublicPOST = function(email) {
   return new Promise(function(resolve, reject) {
-    if (change == "0") {
-      var pubkey = ChainUtil.findPubkeyByEmail(bc.chain, email);
-      if (pubkey == -1) {
+    var pubkey = ChainUtil.findPubkeyByEmail(bc.chain, email);
+    if (pubkey == "-1") {
+      var examples = {};
+      examples["application/json"] = {
+        msg: "No such email in the system"
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+    } else if (pubkey != "-1") {
+      var id = ChainUtil.findIDByEmail(bc.chain, email);
+      var new_pubs = ChainUtil.findCKsByID(bc.chain, id);
+      if (new_pubs == "-1") {
         var examples = {};
         examples["application/json"] = {
-          msg: "No such email in the system"
-        };
-        if (Object.keys(examples).length > 0) {
-          resolve(examples[Object.keys(examples)[0]]);
-        } else {
-          resolve();
-        }
-      } else if (pubkey != -1) {
-        pubkey = pubkey.replace(/\n/g, "\\n");
-        var examples = {};
-        examples["application/json"] = {
-          msg: "This is public key from register time",
           publicKey: pubkey
         };
         if (Object.keys(examples).length > 0) {
@@ -81,44 +222,43 @@ exports.getmypublicPOST = function(email, change) {
         } else {
           resolve();
         }
-      }
-    } else if (change == "1") {
-      var id = ChainUtil.findIDByEmail(bc.chain, email);
-      if (id == -1) {
+      } else if (new_pubs != "-1") {
         var examples = {};
         examples["application/json"] = {
-          msg: "No such email in the system"
+          latest_public_key: pubkey,
+          new_pubs: new_pubs
         };
         if (Object.keys(examples).length > 0) {
           resolve(examples[Object.keys(examples)[0]]);
         } else {
           resolve();
         }
-      } else if (id != -1) {
-        var newPub = ChainUtil.findCKByID(bc.chain, id);
-        if (newPub == -1) {
-          var examples = {};
-          examples["application/json"] = {
-            msg: "No change key blocks in the system"
-          };
-          if (Object.keys(examples).length > 0) {
-            resolve(examples[Object.keys(examples)[0]]);
-          } else {
-            resolve();
-          }
-        } else if (newPub != -1) {
-          newPub = newPub.replace(/\n/g, "\\n");
-          var examples = {};
-          examples["application/json"] = {
-            publicKey: newPub
-          };
-          if (Object.keys(examples).length > 0) {
-            resolve(examples[Object.keys(examples)[0]]);
-          } else {
-            resolve();
-          }
-        }
       }
+
+      // var newPub = ChainUtil.findCKByID(bc.chain, id);
+      // if (newPub == "-1") {
+      //   var resPub = pubkey.replace(/\n/g, "\\n");
+      //   var examples = {};
+      //   examples["application/json"] = {
+      //     publicKey: resPub
+      //   };
+      //   if (Object.keys(examples).length > 0) {
+      //     resolve(examples[Object.keys(examples)[0]]);
+      //   } else {
+      //     resolve();
+      //   }
+      // } else if (newPub != "-1") {
+      //   newPub = newPub.replace(/\n/g, "\\n");
+      //   var examples = {};
+      //   examples["application/json"] = {
+      //     latest_publicKey: newPub
+      //   };
+      //   if (Object.keys(examples).length > 0) {
+      //     resolve(examples[Object.keys(examples)[0]]);
+      //   } else {
+      //     resolve();
+      //   }
+      // }
     }
   });
 };
@@ -151,7 +291,7 @@ exports.isdoctruePOST = function(isdoctrue, file_name) {
       md5File("./documents/" + file_name, (err, hash) => {
         console.log(email + " " + hash);
         var resdate = ChainUtil.ReturnDate(bc.chain, email, hash);
-        if (resdate == -1) {
+        if (resdate == "-1") {
           console.log("Trouble");
           var examples = {};
           examples["application/json"] = {
@@ -212,7 +352,7 @@ exports.getdatePOST = function(getdate, file_name) {
       md5File("./documents/" + file_name, (err, hash) => {
         console.log(email + " " + hash);
         var resdate = ChainUtil.ReturnDate(bc.chain, email, hash);
-        if (resdate == -1) {
+        if (resdate == "-1") {
           console.log("Trouble");
           var examples = {};
           examples["application/json"] = {
@@ -329,10 +469,11 @@ exports.signdocPOST = function(signdoc, file_name) {
     } else {
       var emailstoIds = ChainUtil.EmailsToIds(bc.chain, signdoc.signers);
       var emailstoIds_arr = emailstoIds.split(", ");
+      //console.log(emailstoIds + "---- ---");
       //console.log(emailstoIds_arr);
       // Send emails to another signers in the link from email message
-      if (emailstoIds == -1) {
-        console.log("Trouble!");
+      if (emailstoIds == "-1") {
+        console.log("Trouble with wrong emails!");
         var examples = {};
         examples["application/json"] = {
           msg:
@@ -368,8 +509,18 @@ exports.signdocPOST = function(signdoc, file_name) {
               bc,
               tp
             );
-            p2pServer.broadcastTransaction(transaction);
-            miner.mine();
+            //setTimeout(function() {
+            //  p2pServ.broadcastTransaction(transaction);
+            //}, 1000);
+            //setTimeout(function() {
+            //miner.mine();
+            //}, 500);
+            setTimeout(function() {
+              p2pServ.broadcastTransaction(transaction);
+              setTimeout(function() {
+                miner.mine();
+              }, 1000);
+            }, 1000);
             var nm = new Nodemailer();
             // if false - send email, if true - from invite link,
             /*
@@ -437,6 +588,8 @@ exports.signdocPOST = function(signdoc, file_name) {
  **/
 exports.registerPOST = function(user) {
   return new Promise(function(resolve, reject) {
+    //console.log(user.email);
+    //console.log(user.fio);
     if (ChainUtil.IfEmailExists(bc.chain, user.email) !== undefined) {
       console.log("Trouble!");
       var examples = {};
@@ -450,7 +603,7 @@ exports.registerPOST = function(user) {
       }
     } else {
       var keypair = JSON.parse(ChainUtil.genKeyPair());
-
+      //console.log(keypair);
       var publicKey = keypair.pubpem.replace(/\\n/g, "\n").trim();
       var privateKey = keypair.privpem.replace(/\\n/g, "\n").trim();
 
@@ -462,8 +615,19 @@ exports.registerPOST = function(user) {
         bc,
         tp
       );
-      p2pServer.broadcastTransaction(transaction);
-      miner.mine();
+      //p2pServer.broadcastTransaction(transaction);
+      //setTimeout(function() {
+      //  p2pServ.broadcastTransaction(transaction);
+      //}, 1000);
+      //setTimeout(function() {
+      //miner.mine();
+      //}, 1000);
+      setTimeout(function() {
+        p2pServ.broadcastTransaction(transaction);
+        setTimeout(function() {
+          miner.mine();
+        }, 1000);
+      }, 1000);
       var examples = {};
       examples["application/json"] = {
         privateKey: keypair.privpem,
@@ -483,6 +647,8 @@ exports.registerPOST = function(user) {
  *
  * publicKey String Send user present public key
  * no response value expected for this operation
+ *
+ * Here must be //n !
  **/
 exports.changekeysPOST = function(changekeys) {
   return new Promise(function(resolve, reject) {
@@ -499,7 +665,7 @@ exports.changekeysPOST = function(changekeys) {
         resolve();
       }
     } else {
-      var email = ChainUtil.findEmailByPublicKey(bc.chain, publicKey);
+      //var email = ChainUtil.findEmailByPublicKey(bc.chain, publicKey);
       var keypair = JSON.parse(ChainUtil.genKeyPair());
       var new_public = keypair.pubpem.replace(/\\n/g, "\n").trim();
       const chKeys = new ChangeKeys(publicKey, privateKey);
@@ -510,8 +676,12 @@ exports.changekeysPOST = function(changekeys) {
         bc,
         tp
       );
-      p2pServer.broadcastTransaction(transaction);
+      setTimeout(function() {
+        p2pServ.broadcastTransaction(transaction);
+      }, 1000);
+      //setTimeout(function() {
       miner.mine();
+      //}, 300);
       var examples = {};
       examples["application/json"] = {
         msg: "Success changing",
@@ -539,26 +709,6 @@ exports.checkcertPOST = function(publicKey) {
     var test = true;
     examples["application/json"] = {
       checkresult: test
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-};
-
-/**
- * Check if my signature is true (Use Case 7)
- *
- * checkmysign CheckMySign Document for checking (optional)
- * returns CheckMySignResponse
- **/
-exports.checkmysignaturePOST = function(checkmysign) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples["application/json"] = {
-      check_status: false
     };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

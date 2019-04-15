@@ -1,124 +1,5 @@
 var str = [
   {
-    timestamp: 1535042150640,
-    lastHash:
-      "00258ef444e72092b0b060ac84394d642744637257cfdf23bf73a476fa72dd28",
-    hash: "08rerer3453453r34534r34534c1d8dcb5227654645645645627ebc5c89f",
-    data: [
-      {
-        input: {
-          timestamp: 1535042150638,
-          transaction_type: "register_transaction",
-          transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----",
-          signature:
-            "d58e5cf78e5c7e4d1ca95cab913e58b15144a898b480285cf4bb6a084672bd5362b58b9ad8f0a103b13b1c741a3374bdd3b3b5cfae852f56c0c5720e66b219143b59e4830cfb7542cf390b74703bdd862b9da1ac7b4c891b758805b3ac72430607e4fe80d2e3605a260469830f5bdbddcdf27bb29048adb2d6d12e0e756ff137"
-        },
-        outputs: [
-          {
-            mobilePhone: "537563543",
-            email: "alex@mail.ru",
-            fio: "fio1",
-            user:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----"
-          }
-        ]
-      }
-    ],
-    nonce: 14,
-    difficulty: 1
-  },
-  {
-    timestamp: 1535042150640,
-    lastHash:
-      "00258ef444e72092b0b060ac84394d642744637257cfdf23bf73a476fa72dd28",
-    hash: "08c1d8dcb5256y65y4y46y5y46ya7d9031c0759e2518c51c827ebc5c89f",
-    data: [
-      {
-        input: {
-          timestamp: 1535042150638,
-          transaction_type: "register_transaction",
-          transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----",
-          signature:
-            "d58e5cf78e5c7e4d1ca95cab913e58b15144a898b480285cf4bb6a084672bd5362b58b9ad8f0a103b13b1c741a3374bdd3b3b5cfae852f56c0c5720e66b219143b59e4830cfb7542cf390b74703bdd862b9da1ac7b4c891b758805b3ac72430607e4fe80d2e3605a260469830f5bdbddcdf27bb29048adb2d6d12e0e756ff137"
-        },
-        outputs: [
-          {
-            mobilePhone: "53443243",
-            email: "tom@gmail.com",
-            fio: "fio",
-            user:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----"
-          }
-        ]
-      }
-    ],
-    nonce: 14,
-    difficulty: 1
-  },
-  {
-    timestamp: 1535042150640,
-    lastHash:
-      "00258ef444e72092b0b060ac84394d642744637257cfdf23bf73a476fa72dd28",
-    hash: "08c1d8dcb5256y65y4y46y5y46ya7d9031c0759e2518c51c827ebc5c89f",
-    data: [
-      {
-        input: {
-          timestamp: 1535042150638,
-          transaction_type: "sign_transaction",
-          transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----",
-          signature:
-            "d58e5cf78e5c7e4d1ca95cab913e58b15144a898b480285cf4bb6a084672bd5362b58b9ad8f0a103b13b1c741a3374bdd3b3b5cfae852f56c0c5720e66b219143b59e4830cfb7542cf390b74703bdd862b9da1ac7b4c891b758805b3ac72430607e4fe80d2e3605a260469830f5bdbddcdf27bb29048adb2d6d12e0e756ff137"
-        },
-        outputs: [
-          {
-            mobilePhone: "53443243",
-            email: "tomas@gmail.com",
-            doc_hash: "12331345",
-            user:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----"
-          }
-        ]
-      }
-    ],
-    nonce: 14,
-    difficulty: 1
-  },
-  {
-    timestamp: 1535042150640,
-    lastHash:
-      "00258ef444e72092b0b060ac84394d642744637257cfdf23bf73a476fa72dd28",
-    hash: "08c1d8dcb5256y65y4y46y5y46ya7d9031c0759e2518c51c827ebc5c89f",
-    data: [
-      {
-        input: {
-          timestamp: 1535042150638,
-          transaction_type: "sign_transaction",
-          transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----",
-          signature:
-            "d58e5cf78e5c7e4d1ca95cab913e58b15144a898b480285cf4bb6a084672bd5362b58b9ad8f0a103b13b1c741a3374bdd3b3b5cfae852f56c0c5720e66b219143b59e4830cfb7542cf390b74703bdd862b9da1ac7b4c891b758805b3ac72430607e4fe80d2e3605a260469830f5bdbddcdf27bb29048adb2d6d12e0e756ff137"
-        },
-        outputs: [
-          {
-            mobilePhone: "53443243",
-            email: "tim@gmail.com",
-            doc_hash: "12331345",
-            user:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi6oPd0f1YAwJcO87JbZvJdKeb\nlGx9uKc13CeMiCf4cpyx6AHK+iVd0r/EUy9Bnj5ILBRmT9Xx6zTOb6YUHf3kECTu\nU8djKsQD9pETlhZuBTgeO8SbwYmkbCGLP6JbaOydng2rr0hE2vhXndejCPy3sE1H\nZURSsSJphyjFqZrauwIDAQAB\n-----END PUBLIC KEY-----"
-          }
-        ]
-      }
-    ],
-    nonce: 14,
-    difficulty: 1
-  }
-];
-
-var mystr = [
-  {
     timestamp: "Genesis time",
     lastHash: "----",
     hash: "f78ed219d5b60a3665e7382fe68f97cf837bacc732v924n143mf7b401a6002e4",
@@ -127,126 +8,128 @@ var mystr = [
     difficulty: 3
   },
   {
-    timestamp: 1536487912946,
+    timestamp: 1555145255595,
     lastHash:
       "f78ed219d5b60a3665e7382fe68f97cf837bacc732v924n143mf7b401a6002e4",
-    hash: "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0",
+    hash: "0050334fb451fe23730fdc8b8d4c0eead9d5b05f2d81e57fd0bf6c3af80b7949",
     data: [
       {
         input: {
-          timestamp: 1536487912932,
+          timestamp: 1555145255280,
           transaction_type: "register_transaction",
           transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
+            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYF50cAzq5ZwYDxvVCSFSH1a2b\nW+zlAf18yMjNa2i6YnUvmNBjjLMrr2pG+Qmm4dBUqfiYUsOVyR/BgDfRbNoaOsy2\nCmrU1Z1R2u1qsgCQCTbYmffaY9muRfEjKdh+/Shj6QIcZAS81Tr7a+yIXVA06w3k\nvMJ2pzX7v97DEEcNtQIDAQAB\n-----END PUBLIC KEY-----",
           signature:
-            "0c03483f1be1bce59e435b18f777d99362e3fdfca12d4d6a26ba4ba416d7b4011df1674f808c3e94a6c44186f7d148678c17f892815a08952ac28948ba371da1cb917c92e160d5afdacb71ebef587788057dce4819b24f5a7ec172ba7e7549b2dcc8ca962ac80a6ba66c2200de03cd26400b0d34357c2e25c0d8fdeb5b9db6fe"
+            "472c4b467dfdb2d50e7055b1e6ed358339132d4eb4a34dd9e71f64050b2f067029a0550229c7116ef077d8409e96efd0c5ce2e6a67385b61aaa2a1b7ca3b723ff6d5877561ff652051020c60296e8bd8a2db355ce15d878248d0e9a91043840b63dd25d783959ce5a77742d024369d5860f481c826cdd1827e1a238f9988cf3d"
         },
         outputs: [
           {
-            mobilePhone: "534543543",
-            email: "lexa1548@mail.ru",
-            fio: "Алексей M",
+            mobilePhone: "5453543",
+            email: "alex@mail.ru",
+            fio: "Alex 123",
             user:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----"
+              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYF50cAzq5ZwYDxvVCSFSH1a2b\nW+zlAf18yMjNa2i6YnUvmNBjjLMrr2pG+Qmm4dBUqfiYUsOVyR/BgDfRbNoaOsy2\nCmrU1Z1R2u1qsgCQCTbYmffaY9muRfEjKdh+/Shj6QIcZAS81Tr7a+yIXVA06w3k\nvMJ2pzX7v97DEEcNtQIDAQAB\n-----END PUBLIC KEY-----"
           }
         ]
       }
     ],
-    nonce: 52,
+    nonce: 42,
     difficulty: 2
   },
   {
-    timestamp: 1536488024854,
+    timestamp: 1555145272259,
     lastHash:
-      "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0",
-    hash: "06ba3e577329490cffe120bb013ded784e3cde5f68e4fa1cd1530ccc43d874f3",
+      "0050334fb451fe23730fdc8b8d4c0eead9d5b05f2d81e57fd0bf6c3af80b7949",
+    hash: "08c502b4995b1897dd71092eb551f2429c174d566f6a72add23832af01309821",
     data: [
       {
         input: {
-          timestamp: 1536488029852,
-          transaction_type: "change_keypair",
+          timestamp: 1555145271943,
+          transaction_type: "register_transaction",
           transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
+            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC33frHLPbbLYH2XypUb5BTKMeq\nnTXfaPv2ZUHQ3x9i1pVAtMbFO+Sr4chmOf1hjRi3UIbbuF4ge2mBwJvuprDIwFaA\nWM4Qa37jhU7BqgwGX3vjBuOKEXaUnlgzSK6OrHZCuKGMav40gDsqnw3805BH+Mpq\nJhpOlf1EmgNsjL0+eQIDAQAB\n-----END PUBLIC KEY-----",
           signature:
-            "055e6f115387bd74338265bfa4c3b6d28cd57fe9eadd5f3d184fb8a0521aa13ff2eb40d08e2282cec80f772adf93b37c454ddc5e14cf47e59db0599fd24b7d2136a86c527bfafae6f5e1282514c2981266e74486e231da6a844005e668d9e4018f4fc7a5e7212f70b0253a7beda9c3bfafe374221bdf2a2a85a4318045f898bc"
+            "97f463f544973c6578cece6ceb10d7ace011131cbbf1d338c19aca759eb228b7471aa04a97ca9b7ec282bd1cf69d19cfe2f615709508a539d7a70e87b80fa664e4514e5a2b7e59d2f5093704b33b7572dde4e6537f94f72081dd6bb8316a1e304c4d1e22a84eaf0948b20a46d8d1434b631bafd9d8c0a9e17f9a19a866e130d7"
         },
         outputs: [
           {
-            user_id:
-              "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0",
-            prev_public:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
-            new_public:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1GOIgUlf4+EyM6GCTOxn6ZGAj\nUSlpet84JC7HF+oA65c3CP6GopHJHiJ9S605nCJ2cQzB+Fk/nWlePITIPr81srps\nMmA7kvq23l7YBKWm6Gb+ScbIJ9NgZ6BcTB/1wqcMFq42c04rdAKS/J2Y9UgsxEjR\nPWLUrCvZjr2bYQgQoQIDAQAB\n-----END PUBLIC KEY-----"
+            mobilePhone: "5453543",
+            email: "ivan@mail.ru",
+            fio: "Alex 123",
+            user:
+              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC33frHLPbbLYH2XypUb5BTKMeq\nnTXfaPv2ZUHQ3x9i1pVAtMbFO+Sr4chmOf1hjRi3UIbbuF4ge2mBwJvuprDIwFaA\nWM4Qa37jhU7BqgwGX3vjBuOKEXaUnlgzSK6OrHZCuKGMav40gDsqnw3805BH+Mpq\nJhpOlf1EmgNsjL0+eQIDAQAB\n-----END PUBLIC KEY-----"
           }
         ]
       }
     ],
-    nonce: 16,
+    nonce: 12,
     difficulty: 1
   },
   {
-    timestamp: 1536488029848,
+    timestamp: 1555145402861,
     lastHash:
-      "06ba3e577329490cffe120bb013ded784e3cde5f68e4fa1cd1530ccc43d874f3",
-    hash: "5557c3d9136d4da6a846690e018f95b335a6627009bfc5760d6f8b1d3c593713",
+      "08c502b4995b1897dd71092eb551f2429c174d566f6a72add23832af01309821",
+    hash: "8d6383643121bb719987958809211aa91d1630cad0f08462b11fc88e3ac572c3",
     data: [
       {
         input: {
-          timestamp: 1536488829846,
-          transaction_type: "change_keypair",
+          timestamp: 1555145402559,
+          transaction_type: "sign_transaction",
           transaction_sender:
-            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
+            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYF50cAzq5ZwYDxvVCSFSH1a2b\nW+zlAf18yMjNa2i6YnUvmNBjjLMrr2pG+Qmm4dBUqfiYUsOVyR/BgDfRbNoaOsy2\nCmrU1Z1R2u1qsgCQCTbYmffaY9muRfEjKdh+/Shj6QIcZAS81Tr7a+yIXVA06w3k\nvMJ2pzX7v97DEEcNtQIDAQAB\n-----END PUBLIC KEY-----",
           signature:
-            "42335a57dcd25f8a672af0961f2a689f8cce7fb8d73f4cf14fff75ddc67a56af33fa745b1dcd2b810dba2342f301ecf0ea82c1c966321bb75e8e91233a1c8e0445ce3e3c7798047f7d1554aa21b7ea38a721bfa3b85ecc1f3bb52c5b9b13c43ccf9c5d4432117e60f2647dc247137f8d85161fbbce314c6a0fcab57b52f425a6"
+            "61b87e71a970be361d851be64eb46f7a304f46b9e347be67b0a47dbdf66db7ac198c7ef122b334dac4dac5697ece08c51e6f3db765532b477060bba5fd3d96dd4a738b47f913d11a6b9c1f6adc93c2ae0594e05db1e315cf70450ec2d78ae14f7096c56b4d108067aee4427c67c57a90647cea8036848b3c4be374e7e04be700"
         },
         outputs: [
           {
-            user_id:
-              "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0",
-            prev_public:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
-            new_public:
-              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCy+cPe42AWcCRIfkXQBpUvTtrx\nr259pz1Ez/CyUqh9hA9WTmi0obsgQ28CFJ4uj6AYSIEPX6k7m9YZr1S2es4TWDIw\nW8Szh1VzLS7FpveyickgCbMertIYlQbwkn2L/KMV1xaRnzsngQJ9COujXOmYzFJn\n08yp+hbptZuxsC2rowIDAQAB\n-----END PUBLIC KEY-----"
+            user:
+              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCYF50cAzq5ZwYDxvVCSFSH1a2b\nW+zlAf18yMjNa2i6YnUvmNBjjLMrr2pG+Qmm4dBUqfiYUsOVyR/BgDfRbNoaOsy2\nCmrU1Z1R2u1qsgCQCTbYmffaY9muRfEjKdh+/Shj6QIcZAS81Tr7a+yIXVA06w3k\nvMJ2pzX7v97DEEcNtQIDAQAB\n-----END PUBLIC KEY-----",
+            doc_hash: "7e5006fd453f11438f6b834ebbd85e18",
+            doc_signature:
+              "3b8f9454527141be4da55c5e9379462b86d9ab2b16383720e622d9d98c80701ac4354c80bd7dcf397aa94e3813a308a3d22c62c1c7038411f13ea45f4f43b81e0e328e46dcf6caf99d077114577dbfa53c01bfaf300515ad1b1462434f735347172ab020526202320e4de80c0470fcfdcb0ab773b32d09469875dbff87e661cf",
+            signers:
+              "0050334fb451fe23730fdc8b8d4c0eead9d5b05f2d81e57fd0bf6c3af80b7949, 08c502b4995b1897dd71092eb551f2429c174d566f6a72add23832af01309821"
           }
         ]
       }
     ],
     nonce: 1,
     difficulty: 3
+  },
+  {
+    timestamp: 1555145461920,
+    lastHash:
+      "8d6383643121bb719987958809211aa91d1630cad0f08462b11fc88e3ac572c3",
+    hash: "00e27ef37cd1cf00550011e5169d4a49f6cec5bc299e61b918d00531312fd4fa",
+    data: [
+      {
+        input: {
+          timestamp: 1555145461603,
+          transaction_type: "sign_transaction",
+          transaction_sender:
+            "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC33frHLPbbLYH2XypUb5BTKMeq\nnTXfaPv2ZUHQ3x9i1pVAtMbFO+Sr4chmOf1hjRi3UIbbuF4ge2mBwJvuprDIwFaA\nWM4Qa37jhU7BqgwGX3vjBuOKEXaUnlgzSK6OrHZCuKGMav40gDsqnw3805BH+Mpq\nJhpOlf1EmgNsjL0+eQIDAQAB\n-----END PUBLIC KEY-----",
+          signature:
+            "8711f0780b5757d868ad6a767cde18ee6f983cc8ae03433cb0cea3025a7446510f565da94030499cf61fb35e1ec3fd387a83b5ba3d0a18a2ffe293fc218a03c1db02717bef003715db228986ca5d079814bd4d3d7411c164f09d56ad6969426b1989f0990c42d01c3e9df662fe674084dba29b9119a1a652d27c447cd5c1bb97"
+        },
+        outputs: [
+          {
+            user:
+              "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC33frHLPbbLYH2XypUb5BTKMeq\nnTXfaPv2ZUHQ3x9i1pVAtMbFO+Sr4chmOf1hjRi3UIbbuF4ge2mBwJvuprDIwFaA\nWM4Qa37jhU7BqgwGX3vjBuOKEXaUnlgzSK6OrHZCuKGMav40gDsqnw3805BH+Mpq\nJhpOlf1EmgNsjL0+eQIDAQAB\n-----END PUBLIC KEY-----",
+            doc_hash: "7e5006fd453f11438f6b834ebbd85e18",
+            doc_signature:
+              "53eed25596d509a1964a0927c37274c9950a4d3d6e7a61288b7784b515bd78d12bde473e305d8ca51d217ff82aeadbc23319cbbea8fe06a7589011e287591f10145a501e3e11b6609e5db82f4bbf6cc780d39ee48c2cfa5b070869d186efd4bcd8e802bc275ef1a1ae9732d1a5f98b9bc5b4a914b2d442523c59351eb5bcfa47",
+            signers:
+              "0050334fb451fe23730fdc8b8d4c0eead9d5b05f2d81e57fd0bf6c3af80b7949, 08c502b4995b1897dd71092eb551f2429c174d566f6a72add23832af01309821"
+          }
+        ]
+      }
+    ],
+    nonce: 124,
+    difficulty: 2
   }
-  // {
-  //   timestamp: 1536488034344,
-  //   lastHash:
-  //     "5557c3d9136d4da6a846690e018f95b335a6627009bfc5760d6f8b1d3c593713",
-  //   hash: "00bf2011bdfad411acfd5813cd0c0f27caf539b89fe459512cb490efc474b03b",
-  //   data: [
-  //     {
-  //       input: {
-  //         timestamp: 1536488038325,
-  //         transaction_type: "change_keypair",
-  //         transaction_sender:
-  //           "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
-  //         signature:
-  //           "20fd9d9910fe49da5a30d2319b8df13cfcf3059d4d6052474b1d2ec5ef5cc327eccc751bbc0ad8e48bad9b330a7f5c41cc69d6a9771ea8c5b33beba85e9ee8be152f8727baeb2d661e16f2636239e5416dd859964be8bef7fee8a0239801826f2a2f0226475f76f1ad249844b952b1d82d74717d7c575e7a47965c5eb5570909"
-  //       },
-  //       outputs: [
-  //         {
-  //           user_id:
-  //             "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0",
-  //           prev_public:
-  //             "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCd0TAJmqoHEW+lu91yoXEQnQ//\npaWUYWKOVPVESoXyYb7KZKSssuKofsTpUp/a/AE7Spr2glu7VN3sVpzkEqx7eIWb\n9kWO8SSZ45Cbp1pBTMd5El7Hmnj9U98IS2tCOLVpkveiLdApyIuXBJ3hM5UX1PTw\n3GB++leprm7Edu1B4QIDAQAB\n-----END PUBLIC KEY-----",
-  //           new_public:
-  //             "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIAvoyIbIFy6NjAo2ZzKzNvqrJ\n6GrDE1iZQjFG8QG3xrbBa4FIBibT4hWRe5PSn9oplBely9AAKdIsAqRdfu+GE4TV\n2Dcb/ba1eXSCIWKBgG4Z8RU8RTJ3+HRYj7rVnKuDUU36hkVaP6bgTe4jqh1eGra7\n13HlVLv2ObCoCR4K6wIDAQAB\n-----END PUBLIC KEY-----"
-  //         }
-  //       ]
-  //     }
-  //   ],
-  //   nonce: 119,
-  //   difficulty: 2
-  // }
 ];
-function x(str, user_id) {
+
+function findCKByID(str, user_id) {
   var res = str.filter(
     a =>
       a.data &&
@@ -256,15 +139,18 @@ function x(str, user_id) {
           b.outputs[0].user_id == user_id
       )
   );
-  console.log(res);
-  if (res == undefined) {
-    return -1;
+  console.log(res.length + " res of findCKByID");
+  if (res.length == 0) {
+    console.log("-1");
+    return "-1";
   } else {
-    timestamps = [];
+    let timestamps = [];
+    console.log("res - " + res);
     for (let t of res) {
       timestamps.push(t.data[0].input.timestamp);
     }
     timestamps.sort((a, b) => b - a); // first - the biggest
+    console.log("Timestamps -  " + timestamps);
     var res1 = str.find(
       a =>
         a.data &&
@@ -280,5 +166,8 @@ function x(str, user_id) {
 }
 
 console.log(
-  x(mystr, "007191782441e01f5f82394728f978ddb13352e58752de41d0aacc0ee4639bf0")
+  findCKByID(
+    str,
+    "08c502b4995b1897dd71092eb551f2429c174d566f6a72add23832af01309821"
+  )
 );

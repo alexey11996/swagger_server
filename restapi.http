@@ -1,0 +1,132 @@
+//Get all blocks from blockchain
+GET http://localhost:3000/blocks
+
+###
+
+//Register new user in the system
+POST http://localhost:3000/myroutes/register
+Content-Type: application/json
+
+{
+    "mobilePhone":"5453543", 
+    "email":"ivan@mail.ru", 
+    "fio":"Ivan" 
+}
+
+###
+
+//Sign new document
+//signer - 0 if sender is the first signer, 1 - if sender is invited signer from email link
+//signers - emails of all signers
+//public and private keys are without \n\n (change to 1 \n)
+POST http://localhost:3000/myroutes/signdoc
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="publicKey"
+
+-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCCW/Q6KteR8+aqI++RCn4V2ZMk\n7zx2BgWhrRlDVNPCUUyB/++9PUtSzeVZBefKn1kuUs82fCmAcpzSOFhaLTMJ6bw2\nw3AMsfpFelA1b9PzhSKPSyZBAUcu/riGGP9yhRuhw3NdYhu+VMaJ5MKnHy4fnTDT\nSLpiC9M0UzrIXRzMLwIDAQAB\n-----END PUBLIC KEY-----\n
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="privateKey"
+
+-----BEGIN RSA PRIVATE KEY-----\nMIICXQIBAAKBgQCCW/Q6KteR8+aqI++RCn4V2ZMk7zx2BgWhrRlDVNPCUUyB/++9\nPUtSzeVZBefKn1kuUs82fCmAcpzSOFhaLTMJ6bw2w3AMsfpFelA1b9PzhSKPSyZB\nAUcu/riGGP9yhRuhw3NdYhu+VMaJ5MKnHy4fnTDTSLpiC9M0UzrIXRzMLwIDAQAB\nAoGAMnKHdyMxPWhX8avqgATBeo8ypG54xWvbLhAg4K+pK1/u7bgv/NoFlkvb37Gr\nW/yCtKyTSBCQtwajra7kcjFfuH1bQwmviGVAXMp7vTmZsMRfTTn2jEhX8gBCudY8\npkcqcpvVy2z3X5UjcZ7wji7wHhPCFjWvc8dNNJ8k5AmYymECQQDUe9kS0t8IKzjn\nSvt00CL77EfPCnr2/b/tFfbpFYz/qXAjDg8YGvKasiCTbhkhaxtnh1qrOW/h8MCa\nKojyO/IJAkEAnQ51QnGsUBt1hYJu9a0VqHER360prXYqkeueGJy2v48gBSDRBE6i\nS+zlfP6Vi+ufskdmU9ed+S6UoBN3QG96dwJBAKMp2x3mSZfHQPHzFTa1ITgcT2QA\nIz6IyhlvtWN0xgoIfXCduh+DieoagINVlvyfd7K/MHOtLmnsaqm3oeOI/qkCQBj3\n+nZkwgM+SlG+acuPB9lumGvaCL02AxCNx+WbzIXpyCpojDJGGhE+CUH062uCOzJJ\nnaAIsGm0GRbV4WiSEIMCQQDDXA2IFnVv9zEkB/xzuvhbGxJPWuJVI2UU1bXhG8NN\ngM5raddU2B5OO32jSPXtK6bx2psO0qDjCAsWUl/zqggu\n-----END RSA PRIVATE KEY-----\n
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="signer"
+
+0
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="signers"
+
+ivan@mail.ru
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
+
+###
+
+// Get my public key
+POST http://localhost:3000/myroutes/getmypublic
+Content-Type: application/json
+
+{
+    "email":"ivan@mail.ru"
+}
+
+###
+
+//Check if doc is true
+POST http://localhost:3000/myroutes/isdoctrue
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="email"
+
+ivan@mail.ru
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
+
+###
+// Get date if signing
+POST http://localhost:3000/myroutes/getdate
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="email"
+
+ivan@mail.ru
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
+
+###
+//Check if all signers signed the document
+POST http://localhost:3000/myroutes/checksignatures
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
+
+###
+// Change user's keys
+POST http://localhost:3000/myroutes/changekeys
+Content-Type: application/json
+
+{
+"privateKey": "-----BEGIN RSA PRIVATE KEY-----\\nMIICXQIBAAKBgQCFprEStojwZvOkrYB2lIiBX9/aDDx4uieLaLKlB8/B6nIrBDa/\\nAbFmgPVFtAwZ/P1Z0u5CRuvPfySOLiBimzpg2WItG7zxOkOwASN9VnnK73GvStrj\\nZpTC5W+nasN/fUmOGwDKnhMeZJEE02nYGGiS/tltnO6nor9zoaX9b7NLGQIDAQAB\\nAoGAVpkLYvSjBiGu/KTu9+aGDE3y3XXQOOlldg8Asa2+EAe4seapElomeCRWyDNB\\nJBWokur5Njh90pSvOvDoSvwJdnw0w/+yPVqFntZfC9aRfDatGvSW37GYO06T1MQX\\n9AVaaF/bnZ1LXnCCyEsTy1v0xFPvjSBeiQR3a5JJvqRfsYECQQD7weP9dl7io4IB\\nvyNHEkzbluJ6zJ6PybO3UfqbX8JtFdpU5QCMAArLYQreoCjnENvnfFtjj0oUFwzF\\n1eMgjCa/AkEAh+dHENSTbD/0Vv0g053IG7VEmoKrCJ1CpdNh0HhtmRXpDagOBRhP\\nnsZNNmcpaCFPorjkmZFGMj+NMMKwgYOcJwJAHXHa6X0bseQvw2aIiLpyNMib6oLe\\nFLEhjNJQvjVf9wQ0SfOSsc0bdhf+fnU683N8VMGtqqJKprjfbJAMhXT+3wJBAIFd\\n/f8ea8tCwePAh2wJqP//OHPgaNEFafkSU+0vhhyQh82RKO9eqgQY/k0IPJk8BGOA\\nn1Mzv997MXq2CXDwCEcCQQC+6S861Na1X7ne//WbYXh847WmR8e4MrOcBwdLkL9m\\naR64PtBaX9yFemz3GwrQ9AY1nu4PZrOJiuJBzWSSJLg5\\n-----END RSA PRIVATE KEY-----\\n",
+"publicKey": "-----BEGIN PUBLIC KEY-----\\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCFprEStojwZvOkrYB2lIiBX9/a\\nDDx4uieLaLKlB8/B6nIrBDa/AbFmgPVFtAwZ/P1Z0u5CRuvPfySOLiBimzpg2WIt\\nG7zxOkOwASN9VnnK73GvStrjZpTC5W+nasN/fUmOGwDKnhMeZJEE02nYGGiS/tlt\\nnO6nor9zoaX9b7NLGQIDAQAB\\n-----END PUBLIC KEY-----\\n"
+  }
+
+###
+//Check if my document signature is true
+POST http://localhost:3000/myroutes/checkmysignature
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="publicKey"
+
+-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJV4pqbSk9p8RbeHKK04BmGtlb\nXkS3tfMpgjy2ZYcc2167YnpumEg1Uq3gNYXAvA4cRQ7+ICTQCiwKgxId8KZF8yYQ\nILwCQ9DVh8stqxXERCZaWvhJA3Xk0DzWWqkhVMrY1JJzp5Dhsqm6nvXN366kpJPH\nsfUPiX7gEvnqDb3hzQIDAQAB\n-----END PUBLIC KEY-----\n
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
