@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const path = require("path");
 
 class Nodemailer {
   constructor() {
@@ -16,11 +17,12 @@ class Nodemailer {
     });
   }
 
-  notifySigners(fio, doc_name, recipients, filename, filepath) {
+  notifySigners(fio, doc_name, recipients, Allrecip, filename, filepath) {
     const output = `
     <p>Пользователь ${fio} подписал документ ${doc_name} и теперь приглашает вас к подписанию.</p>
     <p>Вы можете ознакомиться с данным документом и подписать его либо проигнорировать данное сообщение.</p>
     <hr>
+    <p>Для подписи документа перейдите по ссылке http://localhost:8080?emails=${Allrecip}</p>
     <p>При подписании в качестве загружаемого файла используйте файл ${doc_name}, который прикреплен к данному письму.</p>
   `;
     // setup email data with unicode symbols
@@ -31,7 +33,7 @@ class Nodemailer {
       html: output, // html body
       attachments: [
         {
-          filename: filename,
+          filename: `document.${path.extname(filename)}`,
           path: filepath
         }
       ]
@@ -46,28 +48,23 @@ class Nodemailer {
     });
   }
 
-  notifySigEnd(recipients, doc_name, signers_arr, filename, filepath) {
-    var str = "<ul>";
-    signers_arr.forEach(function(signer) {
-      str += "<li>" + signer + "</li>";
-    });
-    str += "</ul>";
+  notifySignEvent(fio, doc_name, recipients, Allrecip, filename, filepath) {
     const output = `
-    <p>Уведомляем вас, что документ ${doc_name} был подписан следующими лицами:</p>
-    ${str}
-    <p>Если данный список подписантов корректен, то документ подписан всеми сторонами.</p>
+    <p>Приглашенный пользователь ${fio} подписал документ ${doc_name} </p>
+    <p>Вы можете ознакомиться с данным документом и подписать его если еще этого не сделали.</p>
     <hr>
-    <p>Подписанный документ доступен для просмотра и прикреплен к данному письму.</p>
+    <p>Для подписи документа перейдите по ссылке http://localhost:8080?emails=${Allrecip}</p>
+    <p>При подписании в качестве загружаемого файла используйте файл ${doc_name}, который прикреплен к данному письму.</p>
   `;
     // setup email data with unicode symbols
     var mailOptions = {
       from: '"Document\'s blockchain" <bcchain@mail.ru>', // sender address
       to: recipients, // list of receivers
-      subject: `Уведомление о подписании документа ${doc_name}`, // Subject line
+      subject: "Новое подписание документа", // Subject line
       html: output, // html body
       attachments: [
         {
-          filename: filename,
+          filename: `document.${path.extname(filename)}`,
           path: filepath
         }
       ]
@@ -76,6 +73,27 @@ class Nodemailer {
     this.transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         return console.log(error);
+      }
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    });
+  }
+
+  sendCode(code, recipient) {
+    const output = `
+    <p>Код для подтверждения адреса электронной почты - <strong>${code}</strong></p>
+  `;
+    // setup email data with unicode symbols
+    var mailOptions = {
+      from: '"Document\'s blockchain" <bcchain@mail.ru>', // sender address
+      to: recipient, // list of receivers
+      subject: "Код подтверждения регистрации", // Subject line
+      html: output // html body
+    };
+    // send mail with defined transport object
+    this.transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error.responseCode + " " + error.response);
       }
       console.log("Message sent: %s", info.messageId);
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));

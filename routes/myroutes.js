@@ -40,6 +40,17 @@ router.post(
   }
 );
 
+router.post("/checksignature", upload.single("document"), (req, res, next) => {
+  var checksign = req.body;
+  Default.checksignaturePOST(checksign, req.file.filename)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
 router.post("/getmypublic", (req, res, next) => {
   var email = req.body.email;
   var change = req.body.change;
@@ -109,7 +120,6 @@ router.post("/register", (req, res, next) => {
 
 router.post("/changekeys", (req, res, next) => {
   var changekeys = req.body;
-  //console.log(changekeys);
   Default.changekeysPOST(changekeys)
     .then(function(response) {
       utils.writeJson(res, response);
@@ -134,17 +144,6 @@ router.post("/checkcert", (req, res, next) => {
     });
 });
 
-router.post("/checksignature", (req, res, next) => {
-  var checksign = req.body;
-  Default.checksignaturePOST(checksign)
-    .then(function(response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function(response) {
-      utils.writeJson(res, response);
-    });
-});
-
 router.post("/givecert", (req, res, next) => {
   var publicKey = req.body.publicKey;
   Default.givecertPOST(publicKey)
@@ -159,6 +158,17 @@ router.post("/givecert", (req, res, next) => {
 router.post("/vefifyaccount", (req, res, next) => {
   var publicKey = req.body.publicKey;
   Default.vefifyaccountPOST(publicKey)
+    .then(function(response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function(response) {
+      utils.writeJson(res, response);
+    });
+});
+
+router.post("/sendcode", (req, res, next) => {
+  var sendcode = req.body;
+  Default.sendcodePOST(sendcode)
     .then(function(response) {
       utils.writeJson(res, response);
     })

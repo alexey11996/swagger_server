@@ -71,6 +71,7 @@ class ChainUtil {
   //   );
   // }
   //str - blockchain chain
+
   static findFIOByPublicKey(str, publicKey) {
     var res = str.find(
       a =>
@@ -236,7 +237,7 @@ class ChainUtil {
   }
 
   static EmailsToIds(str, params) {
-    var arr = params.split(", ");
+    var arr = params.split(",");
     var id_arr = [];
     for (let i = 0; i < arr.length; i++) {
       var res = str.find(
@@ -280,6 +281,7 @@ class ChainUtil {
         )
     );
   }
+
   static ReturnDateByPubKey(str, pubkey, doc_hash) {
     var res_1 = str.find(
       a =>
@@ -364,7 +366,11 @@ class ChainUtil {
             b.outputs[0].doc_hash == hash
         )
     );
-    return res.data[0].outputs[0].signers;
+    if (res == undefined) {
+      return "-1";
+    } else {
+      return res.data[0].outputs[0].signers;
+    }
   }
 
   static ConvertPubKeysToIds(str, hash) {
