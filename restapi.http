@@ -1,16 +1,16 @@
 //Get all blocks from blockchain
-GET http://localhost:3000/blocks
+GET http://0.0.0.0:3000/blocks
 
 ###
 
 //Register new user in the system
-POST http://localhost:3000/myroutes/register
+POST http://0.0.0.0:3000/myroutes/register
 Content-Type: application/json
 
 {
     "mobilePhone":"5453543", 
-    "email":"lexa1548@mail.ru", 
-    "fio":"Алексей Гриднев 48" 
+    "email":"marchgridnev96@gmail.com", 
+    "fio":"Алексей Гриднев 96" 
 }
 
 ###
@@ -18,7 +18,7 @@ Content-Type: application/json
 //Sign new document
 //signers - emails of all signers
 //public and private keys are without \n\n (change to 1 \n)
-POST http://localhost:3000/myroutes/signdoc
+POST http://0.0.0.0:3000/myroutes/signdoc
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
@@ -30,22 +30,22 @@ Content-Type: application/pdf
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
 Content-Disposition: form-data; name="publicKey"
 
------BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAg16DEri+fCUoGMBgPaU7W0U5\nuDtSzO0FFTlewkomMUL6AZ5bXLERFSe0YtF0uQ2tQE/8X2zJBuUJCRxYSe6gAE/t\neNlKjAMTuMTjiwVkCvbDMx14GDB7OdUhCYjtMZSXiHFvyP6HbeIh2VPgiZBfnRp1\nwgZp5/yHXHLqmtWozQIDAQAB\n-----END PUBLIC KEY-----\n
+-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCimgKeEULnmteC+gVHitKrY454\nbSTIQiLnf8WIaDYAEKApM5+KrgVry2aaJNKX0TxofIjk4bz/z6ran9/k5tdrLy+r\nxD7WgP/msNhvbZvKJli03BTXu38rjTMOGcQ9LsOqFJH+kQxG9TcsOE4JuNQVVMSt\n7Cu5VvqBi/JOaWiJTwIDAQAB\n-----END PUBLIC KEY-----\n
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
 Content-Disposition: form-data; name="privateKey"
 
------BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQDAg16DEri+fCUoGMBgPaU7W0U5uDtSzO0FFTlewkomMUL6AZ5b\nXLERFSe0YtF0uQ2tQE/8X2zJBuUJCRxYSe6gAE/teNlKjAMTuMTjiwVkCvbDMx14\nGDB7OdUhCYjtMZSXiHFvyP6HbeIh2VPgiZBfnRp1wgZp5/yHXHLqmtWozQIDAQAB\nAoGAVIXZKyc/IbMUBUTIwfiO4T6zaCIxOatrrT2iUK5xK8+ZHnczdd1+iIeHRTXV\nzK+rB5QjCiVDeAek65Cqd0EOmUH3S/wvohTSPRloTEtVnc+bJ8GBATCl9B7W6W5D\n+n4fM3is/AS6Bea7oDNvr2y+Xw81zKTELlTqJfYaiIskfSkCQQDsWauGVBr7Mfbe\n+Fvw4Y1hQ6pr65VaVohjz87QBZbqcPz3GRQOtPE9XPkrn/JCx7XTFKbUfmYPwVIS\nEmIeoZKTAkEA0ISyn19+/kysgOyPrwxt72zRGUDYGp5Ha78s6xVB8EpBcILuy94N\nizzD5w2s3M43d6pHMP+LVcM3bG4apYwTHwJAPHMq1a6JQBolZB3tlgx6Vpgx7GxS\nxMpBFBZAdSAY21mOubxmTuSkludCq4+7LK1bqeMsUEkL3Ze6X/jns6HrlQJBALit\njnZQ4ezgg7f7zJZA7+0p91ficoPAw4jOXT4oKapkWekITe8Jz/0N6IPvPLajfcTi\nbwMakZF3wNKsAbW1hgkCQHCSFHyeC4SF73YSwKvEzL4IRm5qsmiq7HdI3RAviQ78\nZ5bAw8rwi1ArcaL1d0p/+o+kG7z9eApxTlgHkX2ZI7M=\n-----END RSA PRIVATE KEY-----\n
+-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQCimgKeEULnmteC+gVHitKrY454bSTIQiLnf8WIaDYAEKApM5+K\nrgVry2aaJNKX0TxofIjk4bz/z6ran9/k5tdrLy+rxD7WgP/msNhvbZvKJli03BTX\nu38rjTMOGcQ9LsOqFJH+kQxG9TcsOE4JuNQVVMSt7Cu5VvqBi/JOaWiJTwIDAQAB\nAoGAS04oiCxWYA1GYlKIv2l7yASDpyJlNpnqsGxsf5BD8iPBCVPvP7r4p8O78Qe8\nwLMW1w1WGSqy7YawCjCg8NI4UZ0FDe81odnQrNfXEcBV97E2+OjNjf2JFlraeviN\nTgoNBLpwkiGryN5d+65LlSnAI42dnFPKj24LdhVw/rpaxAECQQDpemHygobL8op7\ncRS2ShVyX+IVBJcHE/ZyfPM1t7Ix830mgYATvfoZFkTK0sje6/Rx/aGMO5r8sBDD\nFHsSQRMvAkEAskle+G+mnqES/nI0U+5QpQD4S6osXmVfLOwru+YpW1HfZ+En1S0D\nfxcaVc3QQgsabVx9Llpuk0hhqaIkfAzj4QJBAJpC7xZRIYj9DnxzAZFTr4nrSjBC\n4RqfGPUaE4OJhKY2T5kydRIWMnmC2h78WBXZ5p+uSZ+i/ks4dUq/bHVqI6cCQChA\n8qVrKBaWzaAPjwsIOsMWlfkXgg8KGlQdOr6g9+N7d9KPfpveHvT59WM8JfJTaXMZ\nt9XYazDr3ckcJ9quWmECQDHKTW6MuD8wxufZzyZ8ZB4WpitlKEFIK0IOpHg9Be6V\nDyQgiI6ILh/uWusiBfD2JTSPNJNa28V5r1Ol7ggkukE=\n-----END RSA PRIVATE KEY-----\n
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
 Content-Disposition: form-data; name="signers"
 
-alexgridnev96@mail.ru,lexa1548@mail.ru
+alexgridnev96@mail.ru,marchgridnev96@gmail.com
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C--
 
 ###
 
 // Get my public key
-POST http://localhost:3000/myroutes/getmypublic
+POST http://0.0.0.0:3000/myroutes/getmypublic
 Content-Type: application/json
 
 {
@@ -54,7 +54,7 @@ Content-Type: application/json
 ###
 
 // Send confirm code
-POST http://localhost:3000/myroutes/sendcode
+POST http://0.0.0.0:3000/myroutes/sendcode
 Content-Type: application/json
 
 {
@@ -65,7 +65,7 @@ Content-Type: application/json
 ###
 
 //Check if doc is true
-POST http://localhost:3000/myroutes/isdoctrue
+POST http://0.0.0.0:3000/myroutes/isdoctrue
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
@@ -82,7 +82,7 @@ Content-Type: application/pdf
 
 ###
 // Get date if signing
-POST http://localhost:3000/myroutes/getdate
+POST http://0.0.0.0:3000/myroutes/getdate
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
@@ -99,7 +99,7 @@ Content-Type: application/pdf
 
 ###
 //Check if all signers signed the document
-POST http://localhost:3000/myroutes/checksignatures
+POST http://0.0.0.0:3000/myroutes/checksignatures
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
@@ -112,7 +112,7 @@ Content-Type: application/pdf
 
 ###
 // Change user's keys
-POST http://localhost:3000/myroutes/changekeys
+POST http://0.0.0.0:3000/myroutes/changekeys
 Content-Type: application/json
 
 {
@@ -121,7 +121,7 @@ Content-Type: application/json
 }
 ###
 //Check if my document signature is true
-POST http://localhost:3000/myroutes/checkmysignature
+POST http://0.0.0.0:3000/myroutes/checkmysignature
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
@@ -138,14 +138,32 @@ Content-Type: application/pdf
 
 ###
 
-//Check if another user's document signature is true
-POST http://localhost:3000/myroutes/checksignature
+//Check if another user's document signature is true by email
+POST http://0.0.0.0:3000/myroutes/checksignature
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
 
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
 Content-Disposition: form-data; name="email"
 
 alexgridnev96@mail.ru
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
+Content-Type: application/pdf
+
+< ./testDoc.pdf
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C--
+
+###
+//Check if another user's document signature is true by mobile phone
+
+POST http://0.0.0.0:3000/myroutes/checksignaturebyphone
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryE19zNvXGzXaLvS5C
+
+------WebKitFormBoundaryE19zNvXGzXaLvS5C
+Content-Disposition: form-data; name="mobilePhone"
+
+545343
 ------WebKitFormBoundaryE19zNvXGzXaLvS5C
 Content-Disposition: form-data; name="document"; filename="testDoc.pdf"
 Content-Type: application/pdf

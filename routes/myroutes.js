@@ -51,6 +51,21 @@ router.post("/checksignature", upload.single("document"), (req, res, next) => {
     });
 });
 
+router.post(
+  "/checksignaturebyphone",
+  upload.single("document"),
+  (req, res, next) => {
+    var checksign = req.body;
+    Default.checksignaturebyphonePOST(checksign, req.file.filename)
+      .then(function(response) {
+        utils.writeJson(res, response);
+      })
+      .catch(function(response) {
+        utils.writeJson(res, response);
+      });
+  }
+);
+
 router.post("/getmypublic", (req, res, next) => {
   var email = req.body.email;
   var change = req.body.change;

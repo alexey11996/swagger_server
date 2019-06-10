@@ -35,7 +35,7 @@ const serverPort = process.env.PORT || 3000;
 
 app.use(`/myroutes`, myroutes);
 
-app.listen(serverPort, () =>
+app.listen(serverPort, "0.0.0.0", () =>
   console.log(`Server running on port ${serverPort}`)
 );
 
@@ -145,7 +145,59 @@ exports.checksignaturePOST = function(checksign, file_name) {
         if (signature == "-1") {
           var examples = {};
           examples["application/json"] = {
-            msg: "Ни один докуент в системе не подписан указанной парой ключей"
+            msg:
+              "Ни один докуент в системе не подписан пользователем с таким почтовым адресом"
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        } else if (signature != "-1") {
+          var bool_res = ChainUtil.verifySignature(pubkey, signature, hash);
+          var examples = {};
+          examples["application/json"] = {
+            check_status: bool_res
+          };
+          if (Object.keys(examples).length > 0) {
+            resolve(examples[Object.keys(examples)[0]]);
+          } else {
+            resolve();
+          }
+        }
+      });
+      fs.unlink("./documents/" + file_name, function(err) {
+        if (err) return console.log(err);
+        console.log(`file ${file_name} deleted`);
+      });
+    }
+  });
+};
+
+/**
+ * Check signature by mobile phone number
+ */
+exports.checksignaturebyphonePOST = function(checksign, file_name) {
+  return new Promise(function(resolve, reject) {
+    var pubkey = ChainUtil.findPubkeyByPhone(bc.chain, checksign.mobilePhone);
+    if (pubkey == "-1") {
+      var examples = {};
+      examples["application/json"] = {
+        msg: "Пользователь с указанным номером не обнаружен"
+      };
+      if (Object.keys(examples).length > 0) {
+        resolve(examples[Object.keys(examples)[0]]);
+      } else {
+        resolve();
+      }
+    } else if (pubkey != "-1") {
+      md5File("./documents/" + file_name, (err, hash) => {
+        var signature = ChainUtil.ReturnDocSignature(bc.chain, hash, pubkey);
+        if (signature == "-1") {
+          var examples = {};
+          examples["application/json"] = {
+            msg:
+              "Ни один докуент в системе не подписан пользователем с таким номером телефона"
           };
           if (Object.keys(examples).length > 0) {
             resolve(examples[Object.keys(examples)[0]]);

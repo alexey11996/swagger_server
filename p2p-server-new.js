@@ -70,7 +70,7 @@ class P2pServerNew {
         }
 
         conn.on("data", message => {
-          const data = JSON.parse(message);
+          const data = JSON.parse(message.toString("utf8").trim());
           console.log(data);
           switch (data.type) {
             case MESSAGE_TYPES.chain:

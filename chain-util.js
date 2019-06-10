@@ -115,6 +115,23 @@ class ChainUtil {
     }
   }
 
+  static findPubkeyByPhone(str, mobilePhone) {
+    var res = str.find(
+      a =>
+        a.data &&
+        a.data.find(
+          b =>
+            b.input.transaction_type == "register_transaction" &&
+            b.outputs[0].mobilePhone == mobilePhone
+        )
+    );
+    if (res == undefined) {
+      return "-1";
+    } else {
+      return res.data[0].outputs[0].user;
+    }
+  }
+
   static findIDByEmail(str, email) {
     var res = str.find(
       a =>
