@@ -30,7 +30,7 @@
     "nodemailer": "^4.6.8",
     "nodemon": "^1.18.3",
     "swagger-tools": "^0.10.4",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "ursa": "^0.9.4",
     "ursa-purejs": "0.0.3",
     "ws": "^6.0.0"
